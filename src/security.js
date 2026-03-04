@@ -99,8 +99,8 @@ const DANGEROUS_GLOBALS_SHADOW = {
  * for each node.  Children are visited in reverse order so that splicing
  * during iteration is safe.
  *
- * @param {object} node
- * @param {(node: object, index: number|null, parent: object|null) => void} callback
+ * @param {any} node
+ * @param {(node: any, index: number|null, parent: any|null) => void} callback
  */
 function walkTree(node, callback) {
   if (node.children) {
@@ -169,7 +169,7 @@ function extractModuleSpecifiers(value) {
  * When enabled, every `{expression}` in the MDX source is removed before
  * compilation, effectively disabling dynamic JavaScript in the content.
  *
- * @returns {(tree: object) => void}
+ * @returns {(tree: any) => void}
  */
 function remarkBlockJS() {
   return function transformer(tree) {
@@ -189,7 +189,7 @@ function remarkBlockJS() {
         (node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement') &&
         node.attributes
       ) {
-        node.attributes = node.attributes.filter((attr) => {
+        node.attributes = node.attributes.filter((/** @type {any} */ attr) => {
           // Remove spread expression attributes entirely
           if (attr.type === 'mdxJsxExpressionAttribute') return false
 
@@ -220,7 +220,7 @@ function remarkBlockJS() {
  * cannot catch every possible attack.  For maximum safety, prefer
  * `blockJS: true` when processing untrusted content.
  *
- * @returns {(tree: object) => void}
+ * @returns {(tree: any) => void}
  */
 function remarkBlockDangerousJS() {
   return function transformer(tree) {
@@ -294,7 +294,7 @@ function remarkBlockDangerousJS() {
  * Return the JavaScript expression text for a node, or `null` if not an
  * expression node.
  *
- * @param {object} node
+ * @param {any} node
  * @returns {string|null}
  */
 function expressionValue(node) {

@@ -1,7 +1,7 @@
 {
-  "name": "mdx-bundler",
-  "version": "0.0.0-semantically-released",
-  "description": "Compile and bundle your MDX files and their dependencies. FAST.",
+  "name": "mdx-bundler-secure",
+  "version": "1.0.0",
+  "description": "Compile and bundle your MDX files and their dependencies. FAST. Security-hardened fork of mdx-bundler with RCE mitigation (CVE-2026-0969).",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -9,9 +9,12 @@
     "mdx",
     "bundler",
     "mdx-bundler",
-    "esbuild"
+    "esbuild",
+    "security",
+    "rce",
+    "cve-2026-0969"
   ],
-  "author": "Kent C. Dodds <me@kentcdodds.com> (https://kentcdodds.com)",
+  "author": "Aaron Son <aaron@safethecode.com> (https://github.com/safethecode)",
   "license": "MIT",
   "engines": {
     "node": ">=18",
@@ -19,12 +22,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kentcdodds/mdx-bundler"
+    "url": "https://github.com/safethecode/mdx-bundler"
   },
   "bugs": {
-    "url": "https://github.com/kentcdodds/mdx-bundler/issues"
+    "url": "https://github.com/safethecode/mdx-bundler/issues"
   },
-  "homepage": "https://github.com/kentcdodds/mdx-bundler#readme",
+  "homepage": "https://github.com/safethecode/mdx-bundler#readme",
   "files": [
     "dist",
     "client"
