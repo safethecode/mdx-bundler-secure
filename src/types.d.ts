@@ -198,7 +198,7 @@ type BundleMDXOptions<Frontmatter> = {
   /**
    * Allows this to output code other than react.
    * Follow https://mdxjs.com/docs/getting-started/#jsx and JSX library's documentation to use
-   * 
+   *
    * @example
    * ```
    * bundleMDX({
@@ -220,6 +220,26 @@ type BundleMDXOptions<Frontmatter> = {
    * ```
    */
   jsxConfig?: JsxConfig;
+  /**
+   * When `true`, **all** JavaScript expressions (`{...}`) in the MDX source
+   * are stripped before compilation.  This is the strongest protection against
+   * code injection via untrusted MDX content.
+   *
+   * @default false
+   */
+  blockJS?: boolean;
+  /**
+   * When `true`, a best-effort check blocks known-dangerous JavaScript
+   * patterns (e.g. `eval()`, `require()`, `process.*`, `Function()`) and
+   * imports from dangerous Node.js built-in modules (e.g. `child_process`,
+   * `fs`, `vm`).  Safe expressions like `{title}` are still allowed.
+   *
+   * This is NOT a sandbox — determined attackers may find bypasses.  For
+   * maximum safety when handling untrusted content, use `blockJS: true`.
+   *
+   * @default true
+   */
+  blockDangerousJS?: boolean;
 };
 
 export type JsxConfig = {
