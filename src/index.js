@@ -7,6 +7,7 @@ import {NodeResolvePlugin} from '@esbuild-plugins/node-resolve'
 import {globalExternals} from '@fal-works/esbuild-plugin-global-externals'
 import {v4 as uuid} from 'uuid'
 import dirnameMessedUp from './dirname-messed-up.cjs'
+import {remarkBlockJS, remarkBlockDangerousJS} from './security.js'
 
 const {readFile, unlink} = fs.promises
 
@@ -44,7 +45,9 @@ async function bundleMDX({
   grayMatterOptions = options => options,
   bundleDirectory,
   bundlePath,
-  jsxConfig = defaultJSXConfig
+  jsxConfig = defaultJSXConfig,
+  blockJS = false,
+  blockDangerousJS = true,
 }) {
   /* c8 ignore start */
   if (dirnameMessedUp && !process.env.ESBUILD_BINARY_PATH) {
@@ -193,6 +196,36 @@ async function bundleMDX({
     },
   }
 
+  // Build security remark plugins list.
+  // blockJS (strip ALL expressions) takes precedence over blockDangerousJS.
+  /** @type {import('unified').Plugin[]} */
+  const securityPlugins = []
+  if (blockJS) {
+    securityPlugins.push(remarkBlockJS)
+  } else if (blockDangerousJS) {
+    securityPlugins.push(remarkBlockDangerousJS)
+  }
+
+  // Let the user configure mdxOptions first, then append security plugins so
+  // they cannot be accidentally removed and always run last.
+  const resolvedMdxOptions = mdxOptions(
+    {
+      remarkPlugins: [
+        remarkFrontmatter,
+        [remarkMdxFrontmatter, {name: 'frontmatter'}],
+      ],
+      jsxImportSource: jsxConfig.jsxLib.package
+    },
+    matter.data,
+  )
+
+  if (securityPlugins.length > 0) {
+    resolvedMdxOptions.remarkPlugins = [
+      ...(resolvedMdxOptions.remarkPlugins ?? []),
+      ...securityPlugins,
+    ]
+  }
+
   const buildOptions = esbuildOptions(
     {
       entryPoints: [entryPath],
@@ -227,18 +260,7 @@ async function bundleMDX({
           resolveOptions: {basedir: cwd},
         }),
         inMemoryPlugin,
-        mdxESBuild(
-          mdxOptions(
-            {
-              remarkPlugins: [
-                remarkFrontmatter,
-                [remarkMdxFrontmatter, {name: 'frontmatter'}],
-              ],
-              jsxImportSource: jsxConfig.jsxLib.package
-            },
-            matter.data,
-          ),
-        ),
+        mdxESBuild(resolvedMdxOptions),
       ],
       bundle: true,
       format: 'iife',
