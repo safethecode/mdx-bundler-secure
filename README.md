@@ -440,6 +440,6 @@ MIT
 [downloads-badge]: https://img.shields.io/npm/dm/mdx-bundler-secure.svg?style=flat-square
 [npmtrends]: https://www.npmtrends.com/mdx-bundler-secure
 [license-badge]: https://img.shields.io/npm/l/mdx-bundler-secure.svg?style=flat-square
-[license]: https://github.com/safethecode/mdx-bundler/blob/main/LICENSE
+[license]: https://github.com/safethecode/mdx-bundler-secure/blob/main/LICENSE
 [node-gyp]: https://github.com/nodejs/node-gyp#installation
 <!-- prettier-ignore-end -->
