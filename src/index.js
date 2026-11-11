@@ -1,18 +1,28 @@
 import fs from 'fs'
 import path from 'path'
 import {StringDecoder} from 'string_decoder'
+import {randomUUID} from 'node:crypto'
 import grayMatter from 'gray-matter'
+import yaml from 'js-yaml'
+import {parse as parseToml} from 'smol-toml'
+import {parse as parseYaml} from 'yaml'
 import * as esbuild from 'esbuild'
 import {NodeResolvePlugin} from '@esbuild-plugins/node-resolve'
 import {globalExternals} from '@fal-works/esbuild-plugin-global-externals'
-import {v4 as uuid} from 'uuid'
 import dirnameMessedUp from './dirname-messed-up.cjs'
 import {remarkBlockJS, remarkBlockDangerousJS} from './security.js'
 
 const {readFile, unlink} = fs.promises
 
+/** @returns {never} */
+function rejectJavaScriptFrontmatter() {
+  throw new Error(
+    'JavaScript frontmatter is disabled. Use YAML, TOML, or JSON instead.',
+  )
+}
+
 /**
- * @type {import('./types').JsxConfig} 
+ * @type {import('./types').JsxConfig}
  */
 const defaultJSXConfig = {
   jsxLib: {
@@ -21,12 +31,12 @@ const defaultJSXConfig = {
   },
   jsxDom: {
     varName: 'ReactDOM',
-    package: 'react-dom'
+    package: 'react-dom',
   },
   jsxRuntime: {
     varName: '_jsx_runtime',
-    package: 'react/jsx-runtime'
-  }
+    package: 'react/jsx-runtime',
+  },
 }
 
 /**
@@ -69,6 +79,20 @@ async function bundleMDX({
     import('remark-mdx-frontmatter'),
   ])
 
+  const configuredMatterOptions = grayMatterOptions({})
+  const matterOptions = {
+    ...configuredMatterOptions,
+    engines: {
+      yaml: /** @type {(input: string) => object} */ (yaml.safeLoad),
+      toml: parseToml,
+      ...configuredMatterOptions.engines,
+      // gray-matter otherwise evaluates a ---js / ---javascript block before
+      // any remark security plugin runs, including when blockJS is enabled.
+      javascript: rejectJavaScriptFrontmatter,
+      js: rejectJavaScriptFrontmatter,
+    },
+  }
+
   let /** @type string */ code,
     /** @type string */ entryPath,
     /** @type Omit<grayMatter.GrayMatterFile<string>, "data"> & {data: Frontmatter} */ matter
@@ -92,25 +116,25 @@ async function bundleMDX({
   if (typeof source === 'string') {
     // The user has supplied MDX source.
     /** @type any */ // Slight type hack to get the graymatter front matter typed correctly.
-    const gMatter = grayMatter(source, grayMatterOptions({}))
+    const gMatter = grayMatter(source, matterOptions)
     matter = gMatter
-    entryPath = path.join(cwd, `./_mdx_bundler_entry_point-${uuid()}.mdx`)
+    entryPath = path.join(cwd, `./_mdx_bundler_entry_point-${randomUUID()}.mdx`)
     absoluteFiles[entryPath] = source
   } else if (isVFile(source)) {
     const value = String(source.value)
     /** @type any */ // Slight type hack to get the graymatter front matter typed correctly.
-    const gMatter = grayMatter(value, grayMatterOptions({}))
+    const gMatter = grayMatter(value, matterOptions)
     matter = gMatter
     entryPath = source.path
       ? path.isAbsolute(source.path)
         ? source.path
         : path.join(source.cwd, source.path)
-      : path.join(cwd, `./_mdx_bundler_entry_point-${uuid()}.mdx`)
+      : path.join(cwd, `./_mdx_bundler_entry_point-${randomUUID()}.mdx`)
     absoluteFiles[entryPath] = value
   } else if (typeof file === 'string') {
     // The user has supplied a file.
     /** @type any */ // Slight type hack to get the graymatter front matter typed correctly.
-    const gMatter = grayMatter.read(file, grayMatterOptions({}))
+    const gMatter = grayMatter.read(file, matterOptions)
     matter = gMatter
     entryPath = file
     /* c8 ignore start */
@@ -212,9 +236,15 @@ async function bundleMDX({
     {
       remarkPlugins: [
         remarkFrontmatter,
-        [remarkMdxFrontmatter, {name: 'frontmatter'}],
+        [
+          remarkMdxFrontmatter,
+          {
+            name: 'frontmatter',
+            parsers: {yaml: parseYaml, toml: parseToml},
+          },
+        ],
       ],
-      jsxImportSource: jsxConfig.jsxLib.package
+      jsxImportSource: jsxConfig.jsxLib.package,
     },
     matter.data,
   )
@@ -234,9 +264,11 @@ async function bundleMDX({
       publicPath: isWriting ? bundlePath : undefined,
       absWorkingDir: cwd,
       define: {
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? 'production'),
+        'process.env.NODE_ENV': JSON.stringify(
+          process.env.NODE_ENV ?? 'production',
+        ),
       },
-      jsx: "automatic",
+      jsx: 'automatic',
       jsxImportSource: jsxConfig.jsxLib.package,
       plugins: [
         globalExternals({
@@ -249,12 +281,15 @@ async function bundleMDX({
             varName: jsxConfig.jsxRuntime.varName,
             type: 'cjs',
           },
-          ...(jsxConfig.jsxDom ? {[jsxConfig.jsxDom.package]: {
-            varName: jsxConfig.jsxDom.varName,
-            type: 'cjs',
-          }} : {})
+          ...(jsxConfig.jsxDom
+            ? {
+                [jsxConfig.jsxDom.package]: {
+                  varName: jsxConfig.jsxDom.varName,
+                  type: 'cjs',
+                },
+              }
+            : {}),
         }),
-        // eslint-disable-next-line new-cap
         NodeResolvePlugin({
           extensions: ['.js', '.ts', '.jsx', '.tsx'],
           resolveOptions: {basedir: cwd},

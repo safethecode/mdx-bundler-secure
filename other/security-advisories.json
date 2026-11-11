@@ -1,0 +1,1702 @@
+{
+  "reviewedAt": "2026-11-11",
+  "baseCommit": "a5d2e6ff35950ddf02ab8164f83f798bdee307f3",
+  "baselineMethod": "Fresh lockfile resolution of the 1.0.0 manifest with npm audit; the original repository had no lockfile.",
+  "baselineAudit": {
+    "info": 0,
+    "low": 8,
+    "moderate": 10,
+    "high": 13,
+    "critical": 0,
+    "total": 31
+  },
+  "baselineUniqueAdvisories": 62,
+  "reviewedAdvisories": 78,
+  "advisories": [
+    {
+      "ghsa": "GHSA-26pp-8wgv-hjvm",
+      "cve": "CVE-2026-56762",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-26pp-8wgv-hjvm",
+      "publishedAt": "2026-04-08T00:17:02Z",
+      "updatedAt": "2026-09-24T18:25:35Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.12",
+          "firstPatchedVersion": "4.12.12"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-2883-xcg3-v3hh",
+      "cve": "CVE-2026-84375",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+      "publishedAt": "2026-09-08T21:24:51Z",
+      "updatedAt": "2026-09-08T21:24:52Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "js-yaml",
+          "affected": ">= 4.0.0, < 4.3.2",
+          "firstPatchedVersion": "4.3.2"
+        },
+        {
+          "name": "js-yaml",
+          "affected": ">= 3.0.0, < 3.15.2",
+          "firstPatchedVersion": "3.15.2"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-2gcr-mfcq-wcc3",
+      "cve": "CVE-2026-47676",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-2gcr-mfcq-wcc3",
+      "publishedAt": "2026-06-04T18:01:00Z",
+      "updatedAt": "2026-06-04T18:01:03Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.21",
+          "firstPatchedVersion": "4.12.21"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-3g3m-2fjr-6pw4",
+      "cve": "CVE-2026-118773",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-3g3m-2fjr-6pw4",
+      "publishedAt": "2026-10-30T23:09:11Z",
+      "updatedAt": "2026-10-30T23:09:15Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "glob",
+          "affected": ">= 9.0.0, <= 14.0.1",
+          "firstPatchedVersion": "14.0.2"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-3hrh-pfw6-9m5x",
+      "cve": "CVE-2026-47675",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-3hrh-pfw6-9m5x",
+      "publishedAt": "2026-06-04T17:59:25Z",
+      "updatedAt": "2026-06-04T17:59:27Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.21",
+          "firstPatchedVersion": "4.12.21"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-3vhc-576x-3qv4",
+      "cve": "CVE-2026-22818",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-3vhc-576x-3qv4",
+      "publishedAt": "2026-01-13T21:52:03Z",
+      "updatedAt": "2026-01-13T21:52:05Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.11.4",
+          "firstPatchedVersion": "4.11.4"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-458j-xx4x-4375",
+      "cve": "CVE-2026-56761",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-458j-xx4x-4375",
+      "publishedAt": "2026-04-16T01:02:24Z",
+      "updatedAt": "2026-06-24T13:10:58Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.14",
+          "firstPatchedVersion": "4.12.14"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-479c-33wc-g2pg",
+      "cve": "CVE-2026-23869",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-479c-33wc-g2pg",
+      "publishedAt": "2026-04-10T15:35:37Z",
+      "updatedAt": "2026-04-10T15:35:39Z",
+      "withdrawnAt": null,
+      "scope": "related ecosystem; package absent from dependency tree",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.0.0, < 19.0.5",
+          "firstPatchedVersion": "19.0.5"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.1.0, < 19.1.6",
+          "firstPatchedVersion": "19.1.6"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.2.0, < 19.2.5",
+          "firstPatchedVersion": "19.2.5"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.0.0, < 19.0.5",
+          "firstPatchedVersion": "19.0.5"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.1.0, < 19.1.6",
+          "firstPatchedVersion": "19.1.6"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.2.0, < 19.2.5",
+          "firstPatchedVersion": "19.2.5"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.0.0, < 19.0.5",
+          "firstPatchedVersion": "19.0.5"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.1.0, < 19.1.6",
+          "firstPatchedVersion": "19.1.6"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.2.0, < 19.2.5",
+          "firstPatchedVersion": "19.2.5"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-48c2-rrv3-qjmp",
+      "cve": "CVE-2026-33532",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-48c2-rrv3-qjmp",
+      "publishedAt": "2026-03-25T20:08:24Z",
+      "updatedAt": "2026-03-27T21:34:54Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "yaml",
+          "affected": ">= 2.0.0, < 2.8.3",
+          "firstPatchedVersion": "2.8.3"
+        },
+        {
+          "name": "yaml",
+          "affected": ">= 1.0.0, < 1.10.3",
+          "firstPatchedVersion": "1.10.3"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-4qx8-w7c3-pj3p",
+      "cve": "CVE-2026-114141",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-4qx8-w7c3-pj3p",
+      "publishedAt": "2026-10-22T16:38:44Z",
+      "updatedAt": "2026-10-22T16:38:47Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "toml",
+          "affected": "<= 5.0.0",
+          "firstPatchedVersion": "5.0.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-52cp-r559-cp3m",
+      "cve": "CVE-2026-59869",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+      "publishedAt": "2026-07-20T21:19:09Z",
+      "updatedAt": "2026-07-20T21:19:10Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "js-yaml",
+          "affected": ">= 3.0.0, < 3.15.0",
+          "firstPatchedVersion": "3.15.0"
+        },
+        {
+          "name": "js-yaml",
+          "affected": ">= 4.0.0, < 4.3.0",
+          "firstPatchedVersion": "4.3.0"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-5c6j-r48x-rmvq",
+      "cve": null,
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-5c6j-r48x-rmvq",
+      "publishedAt": "2026-02-28T02:50:45Z",
+      "updatedAt": "2026-03-02T16:17:37Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "serialize-javascript",
+          "affected": "<= 7.0.2",
+          "firstPatchedVersion": "7.0.3"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-5p4m-2wfm-xmqj",
+      "cve": null,
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+      "publishedAt": "2026-08-06T20:27:32Z",
+      "updatedAt": "2026-08-06T20:27:32Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "js-yaml",
+          "affected": ">= 4.0.0, < 4.3.1",
+          "firstPatchedVersion": "4.3.1"
+        },
+        {
+          "name": "js-yaml",
+          "affected": ">= 3.0.0, < 3.15.1",
+          "firstPatchedVersion": "3.15.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-5pq2-9x2x-5p6w",
+      "cve": "CVE-2026-29086",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-5pq2-9x2x-5p6w",
+      "publishedAt": "2026-03-04T19:49:14Z",
+      "updatedAt": "2026-03-05T15:26:44Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.4",
+          "firstPatchedVersion": "4.12.4"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-67mh-4wv8-2f99",
+      "cve": null,
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-67mh-4wv8-2f99",
+      "publishedAt": "2025-02-10T17:48:07Z",
+      "updatedAt": "2025-02-10T17:48:08Z",
+      "withdrawnAt": null,
+      "scope": "esbuild peer and development tool",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "esbuild",
+          "affected": "<= 0.24.2",
+          "firstPatchedVersion": "0.25.0"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-69xw-7hcm-h432",
+      "cve": "CVE-2026-44455",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-69xw-7hcm-h432",
+      "publishedAt": "2026-05-06T23:49:43Z",
+      "updatedAt": "2026-05-14T20:32:03Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.16",
+          "firstPatchedVersion": "4.12.16"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-6wqw-2p9w-4vw4",
+      "cve": "CVE-2026-24472",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-6wqw-2p9w-4vw4",
+      "publishedAt": "2026-01-27T19:04:17Z",
+      "updatedAt": "2026-01-29T03:39:38Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.11.7",
+          "firstPatchedVersion": "4.11.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-73wf-gq98-2v4g",
+      "cve": "CVE-2026-73088",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+      "publishedAt": "2026-09-01T16:41:54Z",
+      "updatedAt": "2026-09-01T16:41:55Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "browserslist",
+          "affected": "<= 4.28.6",
+          "firstPatchedVersion": "4.28.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-7w5x-hrqm-74c2",
+      "cve": "CVE-2026-85730",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-7w5x-hrqm-74c2",
+      "publishedAt": "2026-09-09T18:07:11Z",
+      "updatedAt": "2026-09-09T18:07:14Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "smol-toml",
+          "affected": "<= 1.7.0",
+          "firstPatchedVersion": "1.7.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-82x6-q7mm-w9cf",
+      "cve": "CVE-2026-77465",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-82x6-q7mm-w9cf",
+      "publishedAt": "2026-09-03T20:56:13Z",
+      "updatedAt": "2026-09-03T20:56:14Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "toml",
+          "affected": "< 4.2.0",
+          "firstPatchedVersion": "4.2.0"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-83fc-fqcc-2hmg",
+      "cve": "CVE-2026-23864",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-83fc-fqcc-2hmg",
+      "publishedAt": "2026-01-29T15:00:30Z",
+      "updatedAt": "2026-01-29T15:00:31Z",
+      "withdrawnAt": null,
+      "scope": "related ecosystem; package absent from dependency tree",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.0.0, < 19.0.4",
+          "firstPatchedVersion": "19.0.4"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.1.0-canary-7130d0c6-20241212, < 19.1.5",
+          "firstPatchedVersion": "19.1.5"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.2.0-canary-63779030-20250328, < 19.2.4",
+          "firstPatchedVersion": "19.2.4"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.0.0, < 19.0.4",
+          "firstPatchedVersion": "19.0.4"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.1.0-canary-7130d0c6-20241212, < 19.1.5",
+          "firstPatchedVersion": "19.1.5"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.2.0-canary-63779030-20250328, < 19.2.4",
+          "firstPatchedVersion": "19.2.4"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.1.0-canary-7130d0c6-20241212, < 19.1.5",
+          "firstPatchedVersion": "19.1.5"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.0.0, < 19.0.4",
+          "firstPatchedVersion": "19.0.4"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.2.0-canary-63779030-20250328, < 19.2.4",
+          "firstPatchedVersion": "19.2.4"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-88fw-hqm2-52qc",
+      "cve": "CVE-2026-54290",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-88fw-hqm2-52qc",
+      "publishedAt": "2026-06-16T14:15:39Z",
+      "updatedAt": "2026-07-21T15:27:04Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.25",
+          "firstPatchedVersion": "4.12.25"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-8j4g-w8fx-2239",
+      "cve": "CVE-2026-69207",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-8j4g-w8fx-2239",
+      "publishedAt": "2026-08-03T20:23:30Z",
+      "updatedAt": "2026-08-03T20:23:59Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.34",
+          "firstPatchedVersion": "4.12.34"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-92vj-g62v-jqhh",
+      "cve": "CVE-2025-59139",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-92vj-g62v-jqhh",
+      "publishedAt": "2025-09-12T21:12:20Z",
+      "updatedAt": "2025-09-12T21:12:21Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.9.7",
+          "firstPatchedVersion": "4.9.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-952p-6rrq-rcjv",
+      "cve": "CVE-2024-4067",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-952p-6rrq-rcjv",
+      "publishedAt": "2024-05-14T18:30:54Z",
+      "updatedAt": "2024-08-28T13:12:27Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "micromatch",
+          "affected": "< 4.0.8",
+          "firstPatchedVersion": "4.0.8"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-9j65-hcg3-gc64",
+      "cve": "CVE-2026-114143",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-9j65-hcg3-gc64",
+      "publishedAt": "2026-10-22T16:38:06Z",
+      "updatedAt": "2026-10-22T16:38:06Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "toml",
+          "affected": "<= 5.0.0",
+          "firstPatchedVersion": "5.0.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-9qmh-m7c6-f92p",
+      "cve": "CVE-2026-114144",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-9qmh-m7c6-f92p",
+      "publishedAt": "2026-10-22T16:36:50Z",
+      "updatedAt": "2026-10-22T16:36:51Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "toml",
+          "affected": "<= 5.0.0",
+          "firstPatchedVersion": "5.0.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-9r54-q6cx-xmh5",
+      "cve": "CVE-2026-24771",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-9r54-q6cx-xmh5",
+      "publishedAt": "2026-01-28T16:10:22Z",
+      "updatedAt": "2026-01-28T16:10:24Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.11.7",
+          "firstPatchedVersion": "4.11.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-9vqf-7f2p-gf9v",
+      "cve": "CVE-2026-44456",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-9vqf-7f2p-gf9v",
+      "publishedAt": "2026-05-06T23:50:10Z",
+      "updatedAt": "2026-05-14T20:32:03Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.16",
+          "firstPatchedVersion": "4.12.16"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-c83g-rgw3-j3cx",
+      "cve": "CVE-2026-73089",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+      "publishedAt": "2026-09-01T16:42:13Z",
+      "updatedAt": "2026-09-01T16:42:15Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "browserslist",
+          "affected": "<= 4.28.6",
+          "firstPatchedVersion": "4.28.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-crvj-82cr-hjcx",
+      "cve": "CVE-2026-84363",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-crvj-82cr-hjcx",
+      "publishedAt": "2026-09-08T21:22:50Z",
+      "updatedAt": "2026-09-08T21:22:51Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.13.5",
+          "firstPatchedVersion": "4.13.5"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-f23p-vx2j-j53r",
+      "cve": "CVE-2026-71850",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-f23p-vx2j-j53r",
+      "publishedAt": "2026-08-07T18:42:01Z",
+      "updatedAt": "2026-08-07T18:42:04Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": ">= 3.8.0, < 4.12.34",
+          "firstPatchedVersion": "4.12.34"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-f577-qrjj-4474",
+      "cve": "CVE-2026-47673",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-f577-qrjj-4474",
+      "publishedAt": "2026-06-04T17:52:04Z",
+      "updatedAt": "2026-06-04T17:52:06Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.21",
+          "firstPatchedVersion": "4.12.21"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-f67f-6cw9-8mq4",
+      "cve": "CVE-2026-22817",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-f67f-6cw9-8mq4",
+      "publishedAt": "2026-01-13T21:51:44Z",
+      "updatedAt": "2026-01-13T21:51:46Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.11.4",
+          "firstPatchedVersion": "4.11.4"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-g2v6-rqmx-r4w6",
+      "cve": null,
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-g2v6-rqmx-r4w6",
+      "publishedAt": "2026-10-05T22:50:55Z",
+      "updatedAt": "2026-10-05T22:50:56Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "@vue/server-renderer",
+          "affected": "< 3.5.42",
+          "firstPatchedVersion": "3.5.42"
+        },
+        {
+          "name": "@vue/server-renderer",
+          "affected": ">= 3.6.0-rc.0, < 3.6.0-rc.6",
+          "firstPatchedVersion": "3.6.0-rc.6"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-g3hv-75wg-m249",
+      "cve": "CVE-2026-118764",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-g3hv-75wg-m249",
+      "publishedAt": "2026-10-30T23:09:55Z",
+      "updatedAt": "2026-11-04T16:50:04Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "minimatch",
+          "affected": ">= 7.0.0, < 11.0.1",
+          "firstPatchedVersion": "11.0.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-g4xw-jxrg-5f6m",
+      "cve": "CVE-2026-0969",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-g4xw-jxrg-5f6m",
+      "publishedAt": "2026-02-12T03:31:01Z",
+      "updatedAt": "2026-02-24T14:20:58Z",
+      "withdrawnAt": null,
+      "scope": "related ecosystem; package absent from dependency tree",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "next-mdx-remote",
+          "affected": ">= 4.3.0, < 6.0.0",
+          "firstPatchedVersion": "6.0.0"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-g6gw-c38x-mqfc",
+      "cve": "CVE-2026-84364",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-g6gw-c38x-mqfc",
+      "publishedAt": "2026-09-08T21:23:02Z",
+      "updatedAt": "2026-09-08T21:23:04Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.13.5",
+          "firstPatchedVersion": "4.13.5"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-gcqx-w48m-w2h4",
+      "cve": "CVE-2026-93753",
+      "severity": "low",
+      "url": "https://github.com/advisories/GHSA-gcqx-w48m-w2h4",
+      "publishedAt": "2026-09-18T18:31:44Z",
+      "updatedAt": "2026-10-27T21:34:58Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "deepmerge",
+          "affected": ">= 4.2.0, <= 4.3.1",
+          "firstPatchedVersion": null
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-gq3j-xvxp-8hrf",
+      "cve": null,
+      "severity": "low",
+      "url": "https://github.com/advisories/GHSA-gq3j-xvxp-8hrf",
+      "publishedAt": "2026-02-19T20:15:59Z",
+      "updatedAt": "2026-02-19T20:16:02Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.11.10",
+          "firstPatchedVersion": "4.11.10"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-gqvv-2mrq-wpjv",
+      "cve": "CVE-2026-84365",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-gqvv-2mrq-wpjv",
+      "publishedAt": "2026-09-08T21:23:51Z",
+      "updatedAt": "2026-09-08T21:23:51Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.13.5",
+          "firstPatchedVersion": "4.13.5"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-grv7-fg5c-xmjg",
+      "cve": "CVE-2024-4068",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-grv7-fg5c-xmjg",
+      "publishedAt": "2024-05-14T18:30:54Z",
+      "updatedAt": "2024-07-05T21:25:08Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "braces",
+          "affected": "< 3.0.3",
+          "firstPatchedVersion": "3.0.3"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-h67p-54hq-rp68",
+      "cve": "CVE-2026-53550",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+      "publishedAt": "2026-06-15T17:15:07Z",
+      "updatedAt": "2026-06-29T15:06:00Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "js-yaml",
+          "affected": ">= 4.0.0, <= 4.1.1",
+          "firstPatchedVersion": "4.2.0"
+        },
+        {
+          "name": "js-yaml",
+          "affected": "< 3.15.0",
+          "firstPatchedVersion": "3.15.0"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-h895-cgqg-jf52",
+      "cve": "CVE-2026-114142",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-h895-cgqg-jf52",
+      "publishedAt": "2026-10-22T16:39:55Z",
+      "updatedAt": "2026-11-11T05:10:47Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "toml",
+          "affected": "<= 5.0.0",
+          "firstPatchedVersion": "5.0.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-hm8q-7f3q-5f36",
+      "cve": "CVE-2026-44459",
+      "severity": "low",
+      "url": "https://github.com/advisories/GHSA-hm8q-7f3q-5f36",
+      "publishedAt": "2026-05-09T00:45:19Z",
+      "updatedAt": "2026-05-14T20:35:49Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.18",
+          "firstPatchedVersion": "4.12.18"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-hxh3-vqpv-xpqv",
+      "cve": "CVE-2026-93981",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-hxh3-vqpv-xpqv",
+      "publishedAt": "2026-09-30T23:46:16Z",
+      "updatedAt": "2026-09-30T23:46:17Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.13.7",
+          "firstPatchedVersion": "4.13.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-j6c9-x7qj-28xf",
+      "cve": "CVE-2026-54287",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-j6c9-x7qj-28xf",
+      "publishedAt": "2026-06-16T14:08:40Z",
+      "updatedAt": "2026-07-21T15:26:49Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.25",
+          "firstPatchedVersion": "4.12.25"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-m5mm-p8h7-m29v",
+      "cve": "CVE-2026-115897",
+      "severity": "low",
+      "url": "https://github.com/advisories/GHSA-m5mm-p8h7-m29v",
+      "publishedAt": "2026-10-23T22:09:52Z",
+      "updatedAt": "2026-10-23T22:09:53Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "serialize-javascript",
+          "affected": "< 7.1.3",
+          "firstPatchedVersion": "7.1.3"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-m732-5p4w-x69g",
+      "cve": "CVE-2025-62610",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-m732-5p4w-x69g",
+      "publishedAt": "2025-10-22T15:21:18Z",
+      "updatedAt": "2025-10-23T17:38:35Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": ">= 1.1.0, < 4.10.2",
+          "firstPatchedVersion": "4.10.2"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-mh29-5h37-fv8m",
+      "cve": "CVE-2025-64718",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-mh29-5h37-fv8m",
+      "publishedAt": "2025-11-14T14:29:48Z",
+      "updatedAt": "2026-01-31T03:32:45Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "js-yaml",
+          "affected": ">= 4.0.0, < 4.1.1",
+          "firstPatchedVersion": "4.1.1"
+        },
+        {
+          "name": "js-yaml",
+          "affected": "< 3.14.2",
+          "firstPatchedVersion": "3.14.2"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-p6xx-57qc-3wxr",
+      "cve": "CVE-2026-29085",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-p6xx-57qc-3wxr",
+      "publishedAt": "2026-03-04T19:48:41Z",
+      "updatedAt": "2026-03-05T15:26:38Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.4",
+          "firstPatchedVersion": "4.12.4"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-p77w-8qqv-26rm",
+      "cve": "CVE-2026-44457",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-p77w-8qqv-26rm",
+      "publishedAt": "2026-05-09T00:28:46Z",
+      "updatedAt": "2026-05-14T20:35:44Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.18",
+          "firstPatchedVersion": "4.12.18"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-pqhp-25j4-6hq9",
+      "cve": null,
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-pqhp-25j4-6hq9",
+      "publishedAt": "2024-11-22T20:40:49Z",
+      "updatedAt": "2024-11-22T20:40:50Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "smol-toml",
+          "affected": "<= 1.3.0",
+          "firstPatchedVersion": "1.3.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-q5qw-h33p-qvwr",
+      "cve": "CVE-2026-29045",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-q5qw-h33p-qvwr",
+      "publishedAt": "2026-03-04T19:48:00Z",
+      "updatedAt": "2026-03-05T15:26:34Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.4",
+          "firstPatchedVersion": "4.12.4"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-q7jf-gf43-6x6p",
+      "cve": "CVE-2025-71381",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-q7jf-gf43-6x6p",
+      "publishedAt": "2025-10-24T19:15:13Z",
+      "updatedAt": "2026-10-02T18:28:56Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.10.3",
+          "firstPatchedVersion": "4.10.3"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-qp7p-654g-cw7p",
+      "cve": "CVE-2026-44458",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-qp7p-654g-cw7p",
+      "publishedAt": "2026-05-09T00:46:44Z",
+      "updatedAt": "2026-05-09T00:46:44Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.18",
+          "firstPatchedVersion": "4.12.18"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-qr28-fpjm-wq7f",
+      "cve": "CVE-2026-118664",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-qr28-fpjm-wq7f",
+      "publishedAt": "2026-10-29T16:41:28Z",
+      "updatedAt": "2026-10-29T16:41:29Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "decode-uri-component",
+          "affected": "<= 0.5.0",
+          "firstPatchedVersion": "0.5.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-r354-f388-2fhh",
+      "cve": "CVE-2026-24398",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-r354-f388-2fhh",
+      "publishedAt": "2026-01-27T19:01:43Z",
+      "updatedAt": "2026-01-29T03:39:03Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.11.7",
+          "firstPatchedVersion": "4.11.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-r4xh-jqrq-34v2",
+      "cve": null,
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-r4xh-jqrq-34v2",
+      "publishedAt": "2026-10-05T23:41:14Z",
+      "updatedAt": "2026-10-05T23:41:15Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "smol-toml",
+          "affected": "<= 1.8.0",
+          "firstPatchedVersion": "1.9.0"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-r5rp-j6wh-rvv4",
+      "cve": "CVE-2026-39410",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-r5rp-j6wh-rvv4",
+      "publishedAt": "2026-04-08T00:17:21Z",
+      "updatedAt": "2026-04-08T15:34:50Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.12",
+          "firstPatchedVersion": "4.12.12"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-rv63-4mwf-qqc2",
+      "cve": "CVE-2026-54288",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-rv63-4mwf-qqc2",
+      "publishedAt": "2026-06-16T14:32:49Z",
+      "updatedAt": "2026-07-21T15:26:54Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.25",
+          "firstPatchedVersion": "4.12.25"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-rv78-f8rc-xrxh",
+      "cve": "CVE-2026-23870",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-rv78-f8rc-xrxh",
+      "publishedAt": "2026-05-11T14:50:07Z",
+      "updatedAt": "2026-05-11T14:50:21Z",
+      "withdrawnAt": null,
+      "scope": "related ecosystem; package absent from dependency tree",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.0.0, < 19.0.6",
+          "firstPatchedVersion": "19.0.6"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.0.0, < 19.0.6",
+          "firstPatchedVersion": "19.0.6"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.0.0, < 19.0.6",
+          "firstPatchedVersion": "19.0.6"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.1.0, < 19.1.7",
+          "firstPatchedVersion": "19.1.7"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.1.0, < 19.1.7",
+          "firstPatchedVersion": "19.1.7"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.1.0, < 19.1.7",
+          "firstPatchedVersion": "19.1.7"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.2.0, < 19.2.6",
+          "firstPatchedVersion": "19.2.6"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.2.0, < 19.2.6",
+          "firstPatchedVersion": "19.2.6"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.2.0, < 19.2.6",
+          "firstPatchedVersion": "19.2.6"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-v3rj-xjv7-4jmq",
+      "cve": null,
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-v3rj-xjv7-4jmq",
+      "publishedAt": "2026-03-25T21:03:56Z",
+      "updatedAt": "2026-03-25T21:03:56Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "smol-toml",
+          "affected": "< 1.6.1",
+          "firstPatchedVersion": "1.6.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-v5mp-jgw5-2x6j",
+      "cve": "CVE-2026-63376",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-v5mp-jgw5-2x6j",
+      "publishedAt": "2026-09-03T20:55:32Z",
+      "updatedAt": "2026-09-03T20:55:34Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "toml",
+          "affected": "< 4.1.2",
+          "firstPatchedVersion": "4.1.2"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-v8w9-8mx6-g223",
+      "cve": "CVE-2026-56763",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-v8w9-8mx6-g223",
+      "publishedAt": "2026-03-11T00:31:47Z",
+      "updatedAt": "2026-10-02T22:36:06Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.7",
+          "firstPatchedVersion": "4.12.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-vcc3-ghjq-m6fr",
+      "cve": "CVE-2026-45822",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-vcc3-ghjq-m6fr",
+      "publishedAt": "2026-08-31T22:10:20Z",
+      "updatedAt": "2026-08-31T22:10:21Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "decode-uri-component",
+          "affected": "<= 0.4.2",
+          "firstPatchedVersion": "0.5.0"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-w332-q679-j88p",
+      "cve": "CVE-2026-24473",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-w332-q679-j88p",
+      "publishedAt": "2026-01-27T19:09:01Z",
+      "updatedAt": "2026-02-04T19:53:49Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.11.7",
+          "firstPatchedVersion": "4.11.7"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-w5hq-g745-h8pq",
+      "cve": "CVE-2026-41907",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "publishedAt": "2026-04-22T20:53:24Z",
+      "updatedAt": "2026-05-21T18:25:57Z",
+      "withdrawnAt": null,
+      "scope": "runtime dependency or runtime parser version floor",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "uuid",
+          "affected": ">= 12.0.0, < 12.0.1",
+          "firstPatchedVersion": "12.0.1"
+        },
+        {
+          "name": "uuid",
+          "affected": ">= 13.0.0, < 13.0.1",
+          "firstPatchedVersion": "13.0.1"
+        },
+        {
+          "name": "uuid",
+          "affected": "< 11.1.1",
+          "firstPatchedVersion": "11.1.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-w62v-xxxg-mg59",
+      "cve": "CVE-2026-59895",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-w62v-xxxg-mg59",
+      "publishedAt": "2026-07-21T18:33:50Z",
+      "updatedAt": "2026-07-21T18:33:50Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": ">= 4.0.0, < 4.12.27",
+          "firstPatchedVersion": "4.12.27"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-wgpf-jwqj-8h8p",
+      "cve": "CVE-2026-54289",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-wgpf-jwqj-8h8p",
+      "publishedAt": "2026-06-16T14:32:31Z",
+      "updatedAt": "2026-07-21T15:26:59Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.25",
+          "firstPatchedVersion": "4.12.25"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-wmmm-f939-6g9c",
+      "cve": "CVE-2026-39407",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-wmmm-f939-6g9c",
+      "publishedAt": "2026-04-08T00:16:45Z",
+      "updatedAt": "2026-04-08T15:34:35Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.12",
+          "firstPatchedVersion": "4.12.12"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-wwfh-h76j-fc44",
+      "cve": "CVE-2026-54286",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-wwfh-h76j-fc44",
+      "publishedAt": "2026-06-16T14:09:03Z",
+      "updatedAt": "2026-07-21T15:27:08Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.25",
+          "firstPatchedVersion": "4.12.25"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-wx67-qw84-cm4g",
+      "cve": "CVE-2026-44907",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-wx67-qw84-cm4g",
+      "publishedAt": "2026-07-24T21:12:02Z",
+      "updatedAt": "2026-07-24T21:12:03Z",
+      "withdrawnAt": null,
+      "scope": "related ecosystem; package absent from dependency tree",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.0.0, < 19.0.8",
+          "firstPatchedVersion": "19.0.8"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.0.0, < 19.0.8",
+          "firstPatchedVersion": "19.0.8"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.1.0, < 19.1.9",
+          "firstPatchedVersion": "19.1.9"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.1.0, < 19.1.9",
+          "firstPatchedVersion": "19.1.9"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.1.0, < 19.1.9",
+          "firstPatchedVersion": "19.1.9"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.2.0, < 19.2.8",
+          "firstPatchedVersion": "19.2.8"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.2.0, < 19.2.8",
+          "firstPatchedVersion": "19.2.8"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.2.0, < 19.2.8",
+          "firstPatchedVersion": "19.2.8"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-xf4j-xp2r-rqqx",
+      "cve": "CVE-2026-39408",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-xf4j-xp2r-rqqx",
+      "publishedAt": "2026-04-08T00:16:51Z",
+      "updatedAt": "2026-04-08T15:34:40Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": ">= 4.0.0, <= 4.12.11",
+          "firstPatchedVersion": "4.12.12"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-xgm2-5f3f-mvvc",
+      "cve": "CVE-2026-59897",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-xgm2-5f3f-mvvc",
+      "publishedAt": "2026-07-21T18:18:13Z",
+      "updatedAt": "2026-07-21T18:18:14Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": ">= 4.3.3, < 4.12.27",
+          "firstPatchedVersion": "4.12.27"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-xpcf-pg52-r92g",
+      "cve": "CVE-2026-39409",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-xpcf-pg52-r92g",
+      "publishedAt": "2026-04-08T00:17:14Z",
+      "updatedAt": "2026-04-24T21:06:14Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.12",
+          "firstPatchedVersion": "4.12.12"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-xqc2-xf4c-x3h3",
+      "cve": "CVE-2026-126187",
+      "severity": "critical",
+      "url": "https://github.com/advisories/GHSA-xqc2-xf4c-x3h3",
+      "publishedAt": "2026-11-10T22:44:12Z",
+      "updatedAt": "2026-11-10T22:44:13Z",
+      "withdrawnAt": null,
+      "scope": "related ecosystem; package absent from dependency tree",
+      "baselineAuditFinding": false,
+      "packages": [
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.0.0, < 19.0.9",
+          "firstPatchedVersion": "19.0.9"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.1.0, < 19.1.10",
+          "firstPatchedVersion": "19.1.10"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.2.0, < 19.2.9",
+          "firstPatchedVersion": "19.2.9"
+        },
+        {
+          "name": "react-server-dom-parcel",
+          "affected": ">= 19.3.0, < 19.3.1",
+          "firstPatchedVersion": "19.3.1"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.0.0, < 19.0.9",
+          "firstPatchedVersion": "19.0.9"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.1.0, < 19.1.10",
+          "firstPatchedVersion": "19.1.10"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.2.0, < 19.2.9",
+          "firstPatchedVersion": "19.2.9"
+        },
+        {
+          "name": "react-server-dom-turbopack",
+          "affected": ">= 19.3.0, < 19.3.1",
+          "firstPatchedVersion": "19.3.1"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.0.0, < 19.0.9",
+          "firstPatchedVersion": "19.0.9"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.1.0, < 19.1.10",
+          "firstPatchedVersion": "19.1.10"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.2.0, < 19.2.9",
+          "firstPatchedVersion": "19.2.9"
+        },
+        {
+          "name": "react-server-dom-webpack",
+          "affected": ">= 19.3.0, < 19.3.1",
+          "firstPatchedVersion": "19.3.1"
+        }
+      ]
+    },
+    {
+      "ghsa": "GHSA-xrhx-7g5j-rcj5",
+      "cve": "CVE-2026-47674",
+      "severity": "medium",
+      "url": "https://github.com/advisories/GHSA-xrhx-7g5j-rcj5",
+      "publishedAt": "2026-06-04T18:00:22Z",
+      "updatedAt": "2026-06-04T18:00:23Z",
+      "withdrawnAt": null,
+      "scope": "development",
+      "baselineAuditFinding": true,
+      "packages": [
+        {
+          "name": "hono",
+          "affected": "< 4.12.21",
+          "firstPatchedVersion": "4.12.21"
+        }
+      ]
+    }
+  ],
+  "finalAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "resolvedRuntimeDependencies": {
+    "@esbuild-plugins/node-resolve": "0.2.2",
+    "@fal-works/esbuild-plugin-global-externals": "2.1.2",
+    "@mdx-js/esbuild": "3.1.1",
+    "gray-matter": "4.0.3",
+    "js-yaml": "3.15.2",
+    "remark-frontmatter": "5.0.0",
+    "remark-mdx-frontmatter": "6.0.0",
+    "smol-toml": "1.9.1",
+    "vfile": "6.0.3",
+    "yaml": "2.9.1"
+  },
+  "removedPackages": [
+    "uuid",
+    "toml",
+    "kcd-scripts",
+    "babel-eslint"
+  ]
+}

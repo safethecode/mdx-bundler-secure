@@ -36,7 +36,7 @@ const DANGEROUS_JS_PATTERNS = [
   /\b__filename\b/,
 
   // Prototype chain exploitation
-  /\.constructor\s*[\[.(]/,
+  /\.constructor\s*[[.(]/,
   /\.__proto__\b/,
   /Object\s*\.\s*getPrototypeOf/,
 
@@ -61,6 +61,7 @@ const DANGEROUS_MODULES = new Set([
   'http2',
   'https',
   'inspector',
+  'module',
   'net',
   'os',
   'process',
@@ -136,17 +137,25 @@ function isDangerousModule(source) {
   if (source.startsWith('node:')) {
     return true
   }
-  return DANGEROUS_MODULES.has(source)
+  return DANGEROUS_MODULES.has(source.split('/')[0])
 }
 
 /**
- * Extract module specifiers from an ESM statement string.
- * Handles both `import ... from 'mod'` and `import 'mod'`.
+ * Prefer decoded ESTree specifiers, including escaped strings and comments.
+ * Fall back to source text for nodes created by third-party plugins.
  *
  * @param {string} value
+ * @param {any} program
  * @returns {string[]}
  */
-function extractModuleSpecifiers(value) {
+function extractModuleSpecifiers(value, program) {
+  if (program?.body) {
+    return program.body.flatMap((/** @type {any} */ statement) =>
+      typeof statement.source?.value === 'string'
+        ? [statement.source.value]
+        : [],
+    )
+  }
   /** @type {string[]} */
   const specifiers = []
 
@@ -164,10 +173,11 @@ function extractModuleSpecifiers(value) {
 // ---------------------------------------------------------------------------
 
 /**
- * Remark plugin that **strips all JavaScript expressions** from the MDX AST.
+ * Strip source ESM, JavaScript expressions, and dynamic JSX attributes.
  *
  * When enabled, every `{expression}` in the MDX source is removed before
- * compilation, effectively disabling dynamic JavaScript in the content.
+ * compilation. Imports and exports from the source are also removed. This
+ * does not sanitize HTML or sandbox caller-provided components and plugins.
  *
  * @returns {(tree: any) => void}
  */
@@ -177,16 +187,20 @@ function remarkBlockJS() {
       if (
         parent &&
         index !== null &&
-        (node.type === 'mdxFlowExpression' || node.type === 'mdxTextExpression')
+        (node.type === 'mdxFlowExpression' ||
+          node.type === 'mdxTextExpression' ||
+          // Generated frontmatter exports have no source position or text.
+          (node.type === 'mdxjsEsm' && (node.position || node.value?.trim())))
       ) {
         parent.children.splice(index, 1)
       }
     })
 
     // Also strip JSX attribute value expressions (e.g. <div onClick={...} />)
-    walkTree(tree, (node) => {
+    walkTree(tree, node => {
       if (
-        (node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement') &&
+        (node.type === 'mdxJsxFlowElement' ||
+          node.type === 'mdxJsxTextElement') &&
         node.attributes
       ) {
         node.attributes = node.attributes.filter((/** @type {any} */ attr) => {
@@ -199,7 +213,7 @@ function remarkBlockJS() {
             typeof attr.value === 'object' &&
             attr.value.type === 'mdxJsxAttributeValueExpression'
           ) {
-            attr.value = null
+            return false
           }
           return true
         })
@@ -217,21 +231,22 @@ function remarkBlockJS() {
  * expressions while still allowing safe expressions to pass through.
  *
  * This is a best-effort defence-in-depth layer.  It is NOT a sandbox and
- * cannot catch every possible attack.  For maximum safety, prefer
- * `blockJS: true` when processing untrusted content.
+ * cannot catch every possible attack. Treat MDX as executable code; untrusted
+ * content requires an isolated execution environment or a Markdown renderer.
  *
  * @returns {(tree: any) => void}
  */
 function remarkBlockDangerousJS() {
   return function transformer(tree) {
     // Check expression nodes
-    walkTree(tree, (node) => {
+    walkTree(tree, node => {
       const value = expressionValue(node)
       if (value === null) return
 
       const result = matchesDangerousPattern(value)
       if (result.matched) {
-        const preview = value.length > 100 ? value.substring(0, 100) + '…' : value
+        const preview =
+          value.length > 100 ? value.substring(0, 100) + '…' : value
         throw new Error(
           `[mdx-bundler] Dangerous JavaScript expression blocked: "${preview}". ` +
             `If this content is trusted, set blockDangerousJS: false.`,
@@ -240,9 +255,10 @@ function remarkBlockDangerousJS() {
     })
 
     // Check JSX attribute expressions
-    walkTree(tree, (node) => {
+    walkTree(tree, node => {
       if (
-        (node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement') &&
+        (node.type === 'mdxJsxFlowElement' ||
+          node.type === 'mdxJsxTextElement') &&
         node.attributes
       ) {
         for (const attr of node.attributes) {
@@ -262,7 +278,8 @@ function remarkBlockDangerousJS() {
           if (value !== null) {
             const result = matchesDangerousPattern(value)
             if (result.matched) {
-              const preview = value.length > 100 ? value.substring(0, 100) + '…' : value
+              const preview =
+                value.length > 100 ? value.substring(0, 100) + '…' : value
               throw new Error(
                 `[mdx-bundler] Dangerous JavaScript in JSX attribute blocked: "${preview}". ` +
                   `If this content is trusted, set blockDangerousJS: false.`,
@@ -274,9 +291,12 @@ function remarkBlockDangerousJS() {
     })
 
     // Check ESM import / export statements for dangerous modules
-    walkTree(tree, (node) => {
+    walkTree(tree, node => {
       if (node.type === 'mdxjsEsm' && node.value) {
-        const specifiers = extractModuleSpecifiers(node.value)
+        const specifiers = extractModuleSpecifiers(
+          node.value,
+          node.data?.estree,
+        )
         for (const specifier of specifiers) {
           if (isDangerousModule(specifier)) {
             throw new Error(
@@ -284,6 +304,12 @@ function remarkBlockDangerousJS() {
                 `If this content is trusted, set blockDangerousJS: false.`,
             )
           }
+        }
+        if (matchesDangerousPattern(node.value).matched) {
+          throw new Error(
+            '[mdx-bundler] Dangerous JavaScript in module statement blocked. ' +
+              'If this content is trusted, set blockDangerousJS: false.',
+          )
         }
       }
     })

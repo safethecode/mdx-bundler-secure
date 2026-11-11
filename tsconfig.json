@@ -1,17 +1,18 @@
 {
-  "extends": "./node_modules/kcd-scripts/shared-tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
-    "target": "ES2020",
-    "module": "ES2020",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {"remark-mdx-images": ["./src/remark-mdx-images.d.ts"]},
     "allowJs": true,
     "checkJs": true,
-    "lib": [
-      "ES2021.String"
-    ],
+    "lib": ["ES2022", "DOM"],
+    "types": ["node", "react", "react-dom"],
+    "strict": true,
+    "esModuleInterop": true,
+    "noEmit": true,
     "skipLibCheck": true
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src"]
 }

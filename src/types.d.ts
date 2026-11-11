@@ -1,17 +1,22 @@
-// This file is for defining types that are annoying to define with jsdoc syntax
-// It has to be at the root so when the src directory is compiled into the dist
-// directory they both reference the same thing (because babel compiles away the
-// types from the .d.ts files and typescript doesn't copy the .d.ts file).
-// kcd-scripts could/should be updated to copy all .d.ts files to the dist directory.
+// Shared declarations referenced by the types generated from the JavaScript.
+// The build copies this file into the dist directory.
 
 import type {Plugin, BuildOptions, Loader} from 'esbuild'
-import type {ModuleInfo} from '@fal-works/esbuild-plugin-global-externals'
-import type {Options} from '@mdx-js/esbuild/lib'
+import type {Options} from '@mdx-js/esbuild'
 import type {GrayMatterOption, Input, GrayMatterFile} from 'gray-matter'
 import type {MDXComponents} from 'mdx/types'
-import type {VFile,VFileOptions} from 'vfile'
+import type {VFile, VFileOptions} from 'vfile'
 
 type ESBuildOptions = BuildOptions
+
+// Keep this public options shape independent of the plugin's missing CommonJS
+// declaration export, so NodeNext consumers can resolve this package's types.
+type ModuleInfo = {
+  varName: string
+  type?: 'esm' | 'cjs'
+  namedExports?: readonly string[]
+  defaultExport?: boolean
+}
 
 export type MDXContentProps = {
   [props: string]: unknown
@@ -19,8 +24,7 @@ export type MDXContentProps = {
 }
 
 export type BundleMDX<Frontmatter extends {[key: string]: any}> =
-  | BundleMDXSource<Frontmatter>
-  | BundleMDXFile<Frontmatter>
+  BundleMDXSource<Frontmatter> | BundleMDXFile<Frontmatter>
 
 export type BundleMDXSource<Frontmatter> = {
   /**
@@ -87,10 +91,7 @@ type BundleMDXOptions<Frontmatter> = {
    * })
    * ```
    */
-  mdxOptions?: (
-    options: Options,
-    frontmatter: Frontmatter,
-  ) => Options
+  mdxOptions?: (options: Options, frontmatter: Frontmatter) => Options
   /**
    * This allows you to modify the built-in esbuild configuration. This can be
    * especially helpful for specifying the compilation target.
@@ -219,15 +220,15 @@ type BundleMDXOptions<Frontmatter> = {
    * })
    * ```
    */
-  jsxConfig?: JsxConfig;
+  jsxConfig?: JsxConfig
   /**
-   * When `true`, **all** JavaScript expressions (`{...}`) in the MDX source
-   * are stripped before compilation.  This is the strongest protection against
-   * code injection via untrusted MDX content.
+   * Strip JavaScript expressions, dynamic JSX attributes, and source imports
+   * and exports before compilation. Generated frontmatter exports remain.
+   * This does not sanitize HTML or sandbox components and plugins.
    *
    * @default false
    */
-  blockJS?: boolean;
+  blockJS?: boolean
   /**
    * When `true`, a best-effort check blocks known-dangerous JavaScript
    * patterns (e.g. `eval()`, `require()`, `process.*`, `Function()`) and
@@ -235,31 +236,32 @@ type BundleMDXOptions<Frontmatter> = {
    * `fs`, `vm`).  Safe expressions like `{title}` are still allowed.
    *
    * This is NOT a sandbox — determined attackers may find bypasses.  For
-   * maximum safety when handling untrusted content, use `blockJS: true`.
+   * untrusted content, use an isolated execution environment or a Markdown
+   * renderer that does not execute JavaScript.
    *
    * @default true
    */
-  blockDangerousJS?: boolean;
-};
+  blockDangerousJS?: boolean
+}
 
 export type JsxConfig = {
   jsxLib: {
     /** @default 'React' */
-    varName: string;
+    varName: string
     /** @default 'react' */
-    package: string;
+    package: string
   }
   jsxDom?: {
     /** @default 'ReactDOM' */
-    varName: string;
+    varName: string
     /** @default 'react-dom' */
-    package: string;
+    package: string
   }
   jsxRuntime: {
     /** @default '_jsx_runtime' */
-    varName: string;
+    varName: string
     /** @default 'react/jsx-runtime' */
-    package: string;
+    package: string
   }
 }
 
@@ -267,7 +269,7 @@ type MDXExport<
   ExportObject extends {},
   Frontmatter = {[key: string]: unknown},
 > = {
-  default: (props: MDXContentProps) => JSX.Element,
+  default: (props: MDXContentProps) => JSX.Element
   frontmatter: Frontmatter
 } & ExportObject
 
@@ -278,7 +280,7 @@ type MDXJsxExportFunction<
   code: string,
   jsxGlobals: Record<string, unknown>,
   globals?: Record<string, unknown>,
-) => ReturnType<MDXExport<ExportedObject, Frontmatter>>
+) => MDXExport<ExportedObject, Frontmatter>
 
 type MDXExportFunction<
   ExportedObject extends {},
@@ -286,4 +288,4 @@ type MDXExportFunction<
 > = (
   code: string,
   globals?: Record<string, unknown>,
-) => ReturnType<MDXExport<ExportedObject, Frontmatter>>
+) => MDXExport<ExportedObject, Frontmatter>

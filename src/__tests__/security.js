@@ -58,7 +58,9 @@ patterns('detects __dirname / __filename', () => {
 })
 
 patterns('detects prototype chain exploitation', () => {
-  assert.ok(matchesDangerousPattern('[].constructor.constructor("code")()').matched)
+  assert.ok(
+    matchesDangerousPattern('[].constructor.constructor("code")()').matched,
+  )
   assert.ok(matchesDangerousPattern('obj.__proto__').matched)
   assert.ok(matchesDangerousPattern('Object.getPrototypeOf(x)').matched)
 })
@@ -102,6 +104,12 @@ modules('flags node: prefixed imports', () => {
   assert.ok(isDangerousModule('node:fs'))
   assert.ok(isDangerousModule('node:child_process'))
   assert.ok(isDangerousModule('node:crypto'))
+})
+
+modules('flags dangerous subpaths and module loaders', () => {
+  assert.ok(isDangerousModule('dns/promises'))
+  assert.ok(isDangerousModule('inspector/promises'))
+  assert.ok(isDangerousModule('module'))
 })
 
 modules('allows safe modules', () => {
@@ -239,6 +247,51 @@ dangerous('allows safe expressions like Math.random()', async () => {
   assert.is(mdxExport.num, 4)
 })
 
+dangerous(
+  'blocks dangerous code in exported declarations and functions',
+  async () => {
+    for (const source of [
+      'export const env = process.env',
+      'export const load = () => import("node:fs")',
+      'export function run() { return eval("code") }',
+    ]) {
+      const error = await bundleMDX({source}).catch(e => e)
+      assert.instance(error, Error)
+      assert.match(
+        error.message,
+        'Dangerous JavaScript in module statement blocked',
+      )
+    }
+  },
+)
+
+dangerous(
+  'blocks built-in imports with comments or escaped module names',
+  async () => {
+    for (const source of [
+      "import /* comment */ 'fs'",
+      String.raw`export * from 'ch\u0069ld_process'`,
+      "import {createRequire} from 'module'",
+      "import {lookup} from 'dns/promises'",
+    ]) {
+      const error = await bundleMDX({source}).catch(e => e)
+      assert.instance(error, Error)
+      assert.match(error.message, 'Import from dangerous module blocked')
+    }
+  },
+)
+
+dangerous('checks JSX attribute expressions and spreads', async () => {
+  for (const source of [
+    '<div title={process.env.SECRET} />',
+    '<div {...globalThis} />',
+  ]) {
+    const error = await bundleMDX({source}).catch(e => e)
+    assert.instance(error, Error)
+    assert.match(error.message, 'Dangerous JavaScript in JSX attribute blocked')
+  }
+})
+
 dangerous('can be disabled with blockDangerousJS: false', async () => {
   // This should NOT throw because we explicitly disabled the check
   const {code} = await bundleMDX({
@@ -311,7 +364,36 @@ This is a paragraph with **bold** and *italic* text.
   assert.match(container.innerHTML, '<strong>bold</strong>')
   assert.match(container.innerHTML, '<em>italic</em>')
   assert.match(container.innerHTML, 'list item 1')
+  assert.equal(getMDXExport(code).frontmatter, {title: 'Static Content'})
 })
+
+blockAll('strips source imports and executable exports', async () => {
+  const {code} = await bundleMDX({
+    source: `import './missing.js'
+
+export const executed = (() => { throw new Error('module executed') })()
+
+# Static content`,
+    blockJS: true,
+  })
+  const exported = getMDXExport(code)
+  assert.not.ok('executed' in exported)
+  const {container} = render(React.createElement(exported.default))
+  assert.match(container.innerHTML, 'Static content')
+})
+
+blockAll(
+  'removes dynamic JSX attributes and spreads while preserving static attributes',
+  async () => {
+    const {code} = await bundleMDX({
+      source:
+        '<div title="static" style={process.env} {...globalThis}>Safe</div>',
+      blockJS: true,
+    })
+    const {container} = render(React.createElement(getMDXComponent(code)))
+    assert.equal(container.innerHTML, '<div title="static">Safe</div>')
+  },
+)
 
 blockAll('blockJS takes precedence over blockDangerousJS', async () => {
   // When both are true, blockJS should win (strip all) rather than throw

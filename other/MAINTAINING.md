@@ -61,19 +61,13 @@ to release. See the next section on Releases for more about that.
 
 ## Release
 
-Our releases are automatic. They happen whenever code lands into `main`. A
-GitHub Action gets kicked off and if it's successful, a tool called
-[`semantic-release`](https://github.com/semantic-release/semantic-release) is
-used to automatically publish a new release to npm as well as a changelog to
-GitHub. It is only able to determine the version and whether a release is
-necessary by the git commit messages. With this in mind, **please brush up on
-[the commit message convention][commit] which drives our releases.**
+Releases use explicit version tags. See [manual-releases.md](manual-releases.md).
+The validation workflow tests Node.js 22, 24, and 26, checks the built package,
+and runs a full dependency audit before the release job can publish.
 
-> One important note about this: Please make sure that commit messages do NOT
-> contain the words "BREAKING CHANGE" in them unless we want to push a major
-> version. I've been burned by this more than once where someone will include
-> "BREAKING CHANGE: None" and it will end up releasing a new major version. Not
-> a huge deal honestly, but kind of annoying...
+Install with `npm ci`. Commit `package-lock.json` when changing dependencies.
+The glob/minimatch overrides apply to development coverage and Vue test tools;
+remove them when those tools declare patched dependency ranges themselves.
 
 ## Thanks!
 

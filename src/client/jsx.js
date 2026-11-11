@@ -17,12 +17,12 @@ function getMDXComponent(code, jsxGlobals, globals) {
 }
 
 /**
- * @template {{}} ExportedObject
- * @template {{}} Frontmatter
- * @type {import('../types').MDXJsxExportFunction<ExportedObject, Frontmatter>}
+ * @template {{}} [ExportedObject=Record<string, any>]
+ * @template {Record<string, unknown>} [Frontmatter=Record<string, unknown>]
  * @param {string} code - The string of code you got from bundleMDX
  * @param {Record<string, unknown>} jsxGlobals - JSX globals
  * @param {Record<string, unknown>} [globals] - Any variables your MDX needs to have accessible when it runs
+ * @returns {import('../types').MDXExport<ExportedObject, Frontmatter>}
  *
  */
 function getMDXExport(code, jsxGlobals, globals) {
@@ -30,7 +30,7 @@ function getMDXExport(code, jsxGlobals, globals) {
   // require, etc.) are `undefined` inside the evaluated scope.  User-supplied
   // globals can still override these if explicitly provided.
   const scope = {...DANGEROUS_GLOBALS_SHADOW, ...jsxGlobals, ...globals}
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-new-func
   const fn = new Function(...Object.keys(scope), code)
   return fn(...Object.values(scope))
 }

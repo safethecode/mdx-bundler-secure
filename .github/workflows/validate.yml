@@ -1,15 +1,12 @@
 name: validate
 on:
   push:
-    branches:
-      - '+([0-9])?(.{+([0-9]),x}).x'
-      - 'main'
-      - 'next'
-      - 'next-major'
-      - 'beta'
-      - 'alpha'
-      - '!all-contributors/**'
+    branches: [main]
+    tags: ['v*']
   pull_request:
+
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,77 +14,58 @@ concurrency:
 
 jobs:
   main:
-    # ignore all-contributors PRs
-    if: ${{ !contains(github.head_ref, 'all-contributors') }}
     strategy:
       matrix:
-        node: [lts/-1, lts/*, latest]
+        node: [22, 24, 26]
     runs-on: ubuntu-latest
     steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v5
-
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node }}
-
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-        env:
-          HUSKY_SKIP_INSTALL: true
-
-      - name: ▶️ Run validate script
-        run: npm run validate
-
-      - name: ⬆️ Upload coverage report
-        uses: codecov/codecov-action@v1
+          cache: npm
+      - run: npm ci
+      - run: npm run validate
 
   release:
     needs: main
     runs-on: ubuntu-latest
-    if:
-      ${{ github.repository == 'kentcdodds/mdx-bundler' &&
-      contains('refs/heads/main,refs/heads/beta,refs/heads/next,refs/heads/alpha',
-      github.ref) && github.event_name == 'push' }}
+    if: >-
+      github.repository == 'safethecode/mdx-bundler-secure' &&
+      github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     permissions:
-      contents: write # to be able to publish a GitHub release
-      id-token: write # to enable use of OIDC for npm provenance
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
+      contents: write
+      id-token: write
     steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v5
-
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v6
+      - uses: actions/checkout@v5
         with:
-          node-version: lts/*
-
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
+          persist-credentials: false
+      - uses: actions/setup-node@v6
         with:
-          useLockFile: false
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - name: Use an npm CLI with trusted publishing support
+        run: npm install --global npm@12
+      - run: npm ci
+      - run: npm run build && npm run test:package
+      - name: Publish the verified tag using npm trusted publishing
+        run: |
+          package_name="$(node -p 'require("./package.json").name')"
+          package_version="$(node -p 'require("./package.json").version')"
+          test "v${package_version}" = "$GITHUB_REF_NAME"
+          if npm view "${package_name}@${package_version}" version > /dev/null 2>&1; then
+            test "$(npm view "${package_name}@${package_version}" gitHead)" = "$GITHUB_SHA"
+            echo "This commit is already published."
+          else
+            npm publish --provenance --access public --ignore-scripts
+          fi
+      - name: Create the GitHub release
         env:
-          HUSKY_SKIP_INSTALL: true
-
-      - name: 🏗 Run build script
-        run: npm run build
-
-      - name: 🚀 Release
-        uses: cycjimmy/semantic-release-action@v5.0.2
-        with:
-          semantic_version: 25
-          branches: |
-            [
-              '+([0-9])?(.{+([0-9]),x}).x',
-              'main',
-              'next',
-              'next-major',
-              {name: 'beta', prerelease: true},
-              {name: 'alpha', prerelease: true}
-            ]
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file CHANGELOG.md
+          fi

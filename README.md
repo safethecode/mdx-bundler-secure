@@ -12,7 +12,12 @@
 
 ## Why this fork?
 
-[CVE-2026-0969](https://nvd.nist.gov/vuln/detail/CVE-2026-0969) disclosed a high-severity **arbitrary code execution** vulnerability in server-side MDX rendering. The original `mdx-bundler` is confirmed affected but has no patch. `mdx-bundler-secure` is a **drop-in replacement** that adds multi-layer RCE mitigation while keeping full backward compatibility.
+[CVE-2026-0969](https://github.com/advisories/GHSA-g4xw-jxrg-5f6m) describes
+arbitrary code execution in `next-mdx-remote` when rendering untrusted MDX.
+`mdx-bundler` also compiles MDX into executable JavaScript. This fork adds checks
+for known dangerous patterns and maintains patched frontmatter parsers while
+retaining the bundling API. Version 2 changes the supported Node.js versions and
+strengthens the security options; see the [changelog](CHANGELOG.md).
 
 ### What was the vulnerability?
 
@@ -26,15 +31,25 @@ MDX allows JavaScript expressions inside `{curly braces}`. When untrusted MDX is
 
 These execute with **full Node.js privileges** on your server.
 
-### How does this fork fix it?
+### What protection does this fork provide?
 
 Three defence layers:
 
 | Layer | What it does | Default |
 |---|---|---|
 | `blockDangerousJS` | Remark plugin blocks known dangerous patterns (`eval`, `require`, `process`, `Function`, `import()`, `__proto__`, etc.) and imports from Node.js built-in modules (`child_process`, `fs`, `vm`, ...) | `true` |
-| `blockJS` | Remark plugin strips **all** `{expressions}` from MDX before compilation | `false` |
+| `blockJS` | Removes source imports/exports, `{expressions}`, and dynamic JSX attributes before compilation | `false` |
 | Runtime shadow | `getMDXExport` shadows `eval`, `Function`, `process`, `global`, `globalThis`, `__dirname`, `__filename` as `undefined` in the `new Function()` scope | Always on |
+
+MDX is executable JavaScript. These checks reduce exposure to known patterns;
+they do not provide a sandbox. Only compile and evaluate trusted MDX in your
+application process. For untrusted content, use a Markdown renderer without
+JavaScript execution or an isolated execution environment. `blockJS` does not
+sanitize HTML or isolate caller-provided JSX components, plugins, or modules.
+
+JavaScript frontmatter (`---js` / `---javascript`) is rejected before parsing.
+See the [security review](https://github.com/safethecode/mdx-bundler-secure/blob/main/other/security-review.md)
+for the dependency audit.
 
 ## Migrating from mdx-bundler
 
@@ -55,11 +70,13 @@ That's it. All existing MDX content with safe expressions (`{title}`, `{frontmat
 
 ## Installation
 
+Version 2 requires Node.js 22+, npm 10+, and esbuild 0.25.0 or newer.
+
 ```
 npm install mdx-bundler-secure esbuild
 ```
 
-One of mdx-bundler-secure's dependencies requires a working [node-gyp][node-gyp] setup to be able to install correctly.
+Use the current security patch of your supported Node.js release.
 
 ## Usage
 
@@ -128,11 +145,15 @@ function Post({code, frontmatter}) {
 
 Type: `boolean` | Default: `true`
 
-Best-effort check that blocks known dangerous JavaScript patterns in MDX expressions and imports from dangerous Node.js built-in modules. Safe expressions like `{title}` or `{items.map(x => x.name)}` pass through.
+Best-effort check that blocks known dangerous JavaScript patterns in MDX
+expressions, JSX attributes, and module statements, plus imports from dangerous
+Node.js built-in modules. Expressions like `{title}` or `{items.map(x => x.name)}`
+pass through.
 
 **Blocked patterns include:** `eval()`, `Function()`, `new Function()`, `require()`, `import()`, `process.*`, `global`, `globalThis`, `__dirname`, `__filename`, `__proto__`, `.constructor[`, `setTimeout("string", ...)`, `Object.getPrototypeOf`
 
-**Blocked modules include:** `child_process`, `fs`, `net`, `os`, `vm`, `worker_threads`, `http`, `https`, and all `node:*` prefixed imports.
+**Blocked modules include:** `child_process`, `fs`, `net`, `os`, `vm`, `module`,
+`worker_threads`, `http`, `https`, their subpaths, and all `node:*` prefixed imports.
 
 ```js
 // Default: dangerous patterns are blocked
@@ -149,12 +170,15 @@ const result = await bundleMDX({
 
 Type: `boolean` | Default: `false`
 
-Strips **all** JavaScript expressions (`{...}`) from MDX before compilation. This is the strongest protection for rendering completely untrusted user-generated MDX.
+Strips JavaScript expressions (`{...}`), source imports/exports, JSX spreads, and
+expression-valued JSX attributes before compilation. Generated frontmatter
+exports remain available. Static JSX and caller-provided components remain, so
+this option does not sanitize HTML or provide an execution sandbox.
 
 ```js
 const result = await bundleMDX({
-  source: userSuppliedMdx,
-  blockJS: true, // removes all {expressions}, only static markdown remains
+  source: trustedMdxSource,
+  blockJS: true, // remove dynamic JavaScript from the MDX source
 })
 ```
 

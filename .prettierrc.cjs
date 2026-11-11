@@ -1,1 +1,7 @@
-module.exports = require('kcd-scripts/prettier')
+module.exports = {
+  bracketSpacing: false,
+  singleQuote: true,
+  semi: false,
+  trailingComma: 'all',
+  arrowParens: 'avoid',
+}
