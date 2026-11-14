@@ -1,469 +1,190 @@
-<div align="center">
-<h1>mdx-bundler-secure</h1>
+# mdx-bundler-secure
 
-<p>Security-hardened fork of <a href="https://github.com/kentcdodds/mdx-bundler">mdx-bundler</a>. Compile and bundle your MDX files and their dependencies. FAST.</p>
-</div>
+Markdown and a restricted, static subset of MDX with a data-only default.
+An explicit trusted mode retains the original MDX/TSX bundler.
 
----
+Version 3 closes the execution, import, and HTML boundaries left open by the
+best-effort filters in 2.x. **Upgrading from 2.x requires rebuilding stored
+artifacts and updating trusted-mode call sites.**
 
-[![version][version-badge]][package]
-[![downloads][downloads-badge]][npmtrends]
-[![MIT License][license-badge]][license]
+## Install
 
-## Why this fork?
-
-[CVE-2026-0969](https://github.com/advisories/GHSA-g4xw-jxrg-5f6m) describes
-arbitrary code execution in `next-mdx-remote` when rendering untrusted MDX.
-`mdx-bundler` also compiles MDX into executable JavaScript. This fork adds checks
-for known dangerous patterns and maintains patched frontmatter parsers while
-retaining the bundling API. Version 2 changes the supported Node.js versions and
-strengthens the security options; see the [changelog](CHANGELOG.md).
-
-### What was the vulnerability?
-
-MDX allows JavaScript expressions inside `{curly braces}`. When untrusted MDX is compiled and evaluated server-side, an attacker can inject:
-
-```mdx
-{require('child_process').execSync('cat /etc/passwd')}
-{eval("process.exit(1)")}
-{new Function("return process.env")()}
+```sh
+npm install mdx-bundler-secure@3 esbuild
 ```
 
-These execute with **full Node.js privileges** on your server.
+Requires Node.js 22+, npm 10+, and esbuild `>=0.25.0 <1`.
 
-### What protection does this fork provide?
+## Default: strict content
 
-Three defence layers:
-
-| Layer | What it does | Default |
-|---|---|---|
-| `blockDangerousJS` | Remark plugin blocks known dangerous patterns (`eval`, `require`, `process`, `Function`, `import()`, `__proto__`, etc.) and imports from Node.js built-in modules (`child_process`, `fs`, `vm`, ...) | `true` |
-| `blockJS` | Removes source imports/exports, `{expressions}`, and dynamic JSX attributes before compilation | `false` |
-| Runtime shadow | `getMDXExport` shadows `eval`, `Function`, `process`, `global`, `globalThis`, `__dirname`, `__filename` as `undefined` in the `new Function()` scope | Always on |
-
-MDX is executable JavaScript. These checks reduce exposure to known patterns;
-they do not provide a sandbox. Only compile and evaluate trusted MDX in your
-application process. For untrusted content, use a Markdown renderer without
-JavaScript execution or an isolated execution environment. `blockJS` does not
-sanitize HTML or isolate caller-provided JSX components, plugins, or modules.
-
-JavaScript frontmatter (`---js` / `---javascript`) is rejected before parsing.
-See the [security review](https://github.com/safethecode/mdx-bundler-secure/blob/main/other/security-review.md)
-for the dependency audit.
-
-## Migrating from mdx-bundler
-
-```diff
-- npm install mdx-bundler
-+ npm install mdx-bundler-secure
-```
-
-```diff
-- import {bundleMDX} from 'mdx-bundler'
-+ import {bundleMDX} from 'mdx-bundler-secure'
-
-- import {getMDXComponent} from 'mdx-bundler/client'
-+ import {getMDXComponent} from 'mdx-bundler-secure/client'
-```
-
-That's it. All existing MDX content with safe expressions (`{title}`, `{frontmatter.date}`, `{items.map(...)}`, etc.) works without changes.
-
-## Installation
-
-Version 2 requires Node.js 22+, npm 10+, and esbuild 0.25.0 or newer.
-
-```
-npm install mdx-bundler-secure esbuild
-```
-
-Use the current security patch of your supported Node.js release.
-
-## Usage
-
-```typescript
+```js
 import {bundleMDX} from 'mdx-bundler-secure'
 
-const mdxSource = `
+const {code, frontmatter} = await bundleMDX({
+  source: `---
+title: My post
 ---
-title: Example Post
-published: 2021-02-13
-description: This is some description
----
-
-# Wahoo
-
-import Demo from './demo'
-
-Here's a **neat** demo:
-
-<Demo />
-`.trim()
-
-const result = await bundleMDX({
-  source: mdxSource,
-  files: {
-    './demo.tsx': `
-import * as React from 'react'
-
-function Demo() {
-  return <div>Neat demo!</div>
-}
-
-export default Demo
-    `,
-  },
-})
-
-const {code, frontmatter} = result
-```
-
-From there, you send the `code` to your client, and then:
-
-```jsx
-import * as React from 'react'
-import {getMDXComponent} from 'mdx-bundler-secure/client'
-
-function Post({code, frontmatter}) {
-  const Component = React.useMemo(() => getMDXComponent(code), [code])
-  return (
-    <>
-      <header>
-        <h1>{frontmatter.title}</h1>
-        <p>{frontmatter.description}</p>
-      </header>
-      <main>
-        <Component />
-      </main>
-    </>
-  )
-}
-```
-
-### Security Options
-
-#### blockDangerousJS
-
-Type: `boolean` | Default: `true`
-
-Best-effort check that blocks known dangerous JavaScript patterns in MDX
-expressions, JSX attributes, and module statements, plus imports from dangerous
-Node.js built-in modules. Expressions like `{title}` or `{items.map(x => x.name)}`
-pass through.
-
-**Blocked patterns include:** `eval()`, `Function()`, `new Function()`, `require()`, `import()`, `process.*`, `global`, `globalThis`, `__dirname`, `__filename`, `__proto__`, `.constructor[`, `setTimeout("string", ...)`, `Object.getPrototypeOf`
-
-**Blocked modules include:** `child_process`, `fs`, `net`, `os`, `vm`, `module`,
-`worker_threads`, `http`, `https`, their subpaths, and all `node:*` prefixed imports.
-
-```js
-// Default: dangerous patterns are blocked
-const result = await bundleMDX({source: mdxSource})
-
-// Opt out for fully trusted content
-const result = await bundleMDX({
-  source: trustedMdxSource,
-  blockDangerousJS: false,
-})
-```
-
-#### blockJS
-
-Type: `boolean` | Default: `false`
-
-Strips JavaScript expressions (`{...}`), source imports/exports, JSX spreads, and
-expression-valued JSX attributes before compilation. Generated frontmatter
-exports remain available. Static JSX and caller-provided components remain, so
-this option does not sanitize HTML or provide an execution sandbox.
-
-```js
-const result = await bundleMDX({
-  source: trustedMdxSource,
-  blockJS: true, // remove dynamic JavaScript from the MDX source
-})
-```
-
-When both `blockJS` and `blockDangerousJS` are `true`, `blockJS` takes precedence (strips all rather than throwing on dangerous ones).
-
-### Options
-
-#### source
-
-The `string` source of your MDX.
-
-_Can not be set if `file` is set_
-
-#### file
-
-The path to the file on your disk with the MDX in. You will probably want to set [cwd](#cwd) as well.
-
-_Can not be set if `source` is set_
-
-#### files
-
-The `files` config is an object of all the files you're bundling. The key is the path to the file (relative to the MDX source) and the value is the string of the file source code. You could get these from the filesystem or from a remote database. If your MDX doesn't reference other files (or only imports things from `node_modules`), then you can omit this entirely.
-
-#### mdxOptions
-
-This allows you to modify the built-in MDX configuration (passed to `@mdx-js/esbuild`). This can be helpful for specifying your own remarkPlugins/rehypePlugins.
-
-The function is passed the default mdxOptions and the frontmatter.
-
-```ts
-bundleMDX({
-  source: mdxSource,
-  mdxOptions(options, frontmatter) {
-    options.remarkPlugins = [...(options.remarkPlugins ?? []), myRemarkPlugin]
-    options.rehypePlugins = [...(options.rehypePlugins ?? []), myRehypePlugin]
-
-    return options
-  },
-})
-```
-
-#### esbuildOptions
-
-You can customize any of esbuild options with the option `esbuildOptions`. This takes a function which is passed the default esbuild options and the frontmatter and expects an options object to be returned.
-
-```typescript
-bundleMDX({
-  source: mdxSource,
-  esbuildOptions(options, frontmatter) {
-    options.minify = false
-    options.target = [
-      'es2020',
-      'chrome58',
-      'firefox57',
-      'safari11',
-      'edge16',
-      'node12',
-    ]
-
-    return options
-  },
-})
-```
-
-More information on the available options can be found in the [esbuild documentation](https://esbuild.github.io/api/#build-api).
-
-#### globals
-
-This tells esbuild that a given module is externally available. For example, if your MDX file uses the d3 library and you're already using the d3 library in your app then you'll end up shipping `d3` to the user twice (once for your app and once for this MDX component). This is wasteful and you'd be better off just telling esbuild to _not_ bundle `d3` and you can pass it to the component yourself when you call `getMDXComponent`.
-
-```tsx
-// server-side or build-time code that runs in Node:
-import {bundleMDX} from 'mdx-bundler-secure'
-
-const mdxSource = `
-# This is the title
-
-import leftPad from 'left-pad'
-
-<div>{leftPad("Neat demo!", 12, '!')}</div>
-`.trim()
-
-const result = await bundleMDX({
-  source: mdxSource,
-  globals: {'left-pad': 'myLeftPad'},
-})
-```
-
-```tsx
-// server-rendered and/or client-side code that can run in the browser or Node:
-import * as React from 'react'
-import leftPad from 'left-pad'
-import {getMDXComponent} from 'mdx-bundler-secure/client'
-
-function MDXPage({code}: {code: string}) {
-  const Component = React.useMemo(
-    () => getMDXComponent(result.code, {myLeftPad: leftPad}),
-    [result.code, leftPad],
-  )
-  return (
-    <main>
-      <Component />
-    </main>
-  )
-}
-```
-
-#### cwd
-
-Setting `cwd` (_current working directory_) to a directory will allow esbuild to resolve imports. This directory could be the directory the mdx content was read from or a directory that off-disk mdx should be _run_ in.
-
-#### grayMatterOptions
-
-This allows you to configure the [gray-matter options](https://github.com/jonschlinkert/gray-matter#options).
-
-```js
-bundleMDX({
-  grayMatterOptions: options => {
-    options.excerpt = true
-    return options
-  },
-})
-```
-
-#### bundleDirectory & bundlePath
-
-This allows you to set the output directory for the bundle and the public URL to the directory. If one option is set the other must be as well.
-
-#### jsxConfig
-
-Allows output for JSX runtimes other than React (Preact, Hono, Vue, etc). See [Other JSX runtimes](#other-jsx-runtimes).
-
-### Returns
-
-`bundleMDX` returns a promise for an object with the following properties.
-
-- `code` - The bundle of your mdx as a `string`.
-- `frontmatter` - The frontmatter `object` from gray-matter.
-- `matter` - The whole [object returned by gray-matter](https://github.com/jonschlinkert/gray-matter#returned-object)
-
-### Types
-
-`mdx-bundler-secure` supplies complete typings within its own package.
-
-`bundleMDX` has a single type parameter which is the type of your frontmatter. It defaults to `{[key: string]: any}` and must be an object.
-
-```ts
-const {frontmatter} = bundleMDX<{title: string}>({source})
-
-frontmatter.title // has type string
-```
-
-### Component Substitution
-
-MDX Bundler passes on [MDX's ability to substitute components](https://mdxjs.com/docs/using-mdx/#components) through the `components` prop on the component returned by `getMDXComponent`.
-
-```tsx
-import * as React from 'react'
-import {getMDXComponent} from 'mdx-bundler-secure/client'
-
-const Paragraph: React.FC = props => {
-  if (typeof props.children !== 'string' && props.children.type === 'img') {
-    return <>{props.children}</>
-  }
-
-  return <p {...props} />
-}
-
-function MDXPage({code}: {code: string}) {
-  const Component = React.useMemo(() => getMDXComponent(code), [code])
-
-  return (
-    <main>
-      <Component components={{p: Paragraph}} />
-    </main>
-  )
-}
-```
-
-### Frontmatter and const
-
-You can reference frontmatter meta or consts in the mdx content.
-
-```mdx
----
-title: Example Post
----
-
-export const exampleImage = 'https://example.com/image.jpg'
-
 # {frontmatter.title}
 
-<img src={exampleImage} alt="Image alt text" />
+A **strong** word and <span title="static">static JSX</span>.
+`,
+})
 ```
 
-### Accessing named exports
+Render with the matching client:
 
-You can use `getMDXExport` instead of `getMDXComponent` to treat the mdx file as a module instead of just a component. It takes the same arguments that `getMDXComponent` does.
+```jsx
+import {useMemo} from 'react'
+import {getMDXComponent} from 'mdx-bundler-secure/client'
+
+export function Post({code}) {
+  const Content = useMemo(() => getMDXComponent(code), [code])
+  return <Content />
+}
+```
+
+Strict `code` is a versioned data artifact. The client validates the artifact and
+constructs elements directly; it does not use `eval` or `new Function`.
+
+Strict mode supports:
+
+- Markdown headings, lists, links, images, quotes, code blocks, and inline code.
+- Static JSX using a fixed list of content elements, attributes, and URL schemes.
+- YAML, JSON, and TOML frontmatter (`---`, `---json`, and `+++`).
+- Literal values and own frontmatter property references such as
+  `{frontmatter.title}` or `{frontmatter['title']}`. Calls, functions, operators,
+  arbitrary identifiers, and prototype properties are rejected.
+- `blockJS: true` to remove expressions, dynamic JSX attributes, and source
+  imports/exports entirely. The element/attribute/URL policy remains active.
+
+Strict mode rejects source imports and exports by default and never resolves
+source modules or packages. It does not run caller plugins or custom engines.
+`files`, `globals`, `mdxOptions`, `esbuildOptions`, `grayMatterOptions`,
+`jsxConfig`, `bundleDirectory`, and `bundlePath` require trusted mode.
+
+The static policy rejects scripts, iframes, SVG/MathML, forms, embedded objects,
+inline styles, event handlers, raw HTML insertion, and unsafe URL protocols.
+Element IDs and fragment links receive the `mdx-content-` prefix. New-window links
+receive `noopener noreferrer`. Unknown elements and attributes fail closed.
+
+Host-provided `components` mappings remain available for styling Markdown tags.
+Those components are application code: they and the JSX runtime must be trusted.
+Never obtain component implementations or security options from an untrusted
+request body.
+
+## Explicit file input
 
 ```js
-import * as React from 'react'
-import {getMDXExport} from 'mdx-bundler-secure/client'
-
-function MDXPage({code}: {code: string}) {
-  const mdxExport = getMDXExport(code)
-  console.log(mdxExport.toc) // [ { depth: 1, value: 'The title' } ]
-
-  const Component = React.useMemo(() => mdxExport.default, [code])
-
-  return <Component />
-}
+const result = await bundleMDX({file: 'post.mdx', cwd: '/srv/content'})
 ```
 
-### Other JSX runtimes
+Strict mode opens only `.md` and `.mdx` entry files whose real paths are inside
+`cwd` (default: `process.cwd()`). Imports inside the content are still rejected.
+The application controls entry paths and should keep the content directory
+read-only to untrusted users.
 
-JSX runtimes mentioned [here](https://mdxjs.com/docs/getting-started/#jsx) are guaranteed to be supported. Any JSX runtime with its own jsx runtime export should work.
+## Resource limits
 
-```tsx
-const getMDX = (source) => {
-  return bundleMDX({
-    source,
-    jsxConfig: {
-      jsxLib: {
-        varName: 'HonoJSX',
-        package: 'hono/jsx',
-      },
-      jsxDom: {
-        varName: 'HonoDOM',
-        package: 'hono/jsx/dom',
-      },
-      jsxRuntime: {
-        varName: '_jsx_runtime',
-        package: 'hono/jsx/jsx-runtime',
-      },
-    }
-  });
-}
+Strict parsing runs in a disposable worker with a deadline and V8 heap limits.
+The source is never evaluated in that worker.
 
-// Client side
-import { getMDXComponent } from "mdx-bundler-secure/client/jsx";
-import * as HonoJSX from "hono/jsx";
-import * as HonoDOM from "hono/jsx/dom";
-import * as _jsx_runtime from "hono/jsx/jsx-runtime";
+| Limit                               | Default / ceiling         |
+| ----------------------------------- | ------------------------- |
+| UTF-8 source                        | 256 KiB                   |
+| Static artifact                     | 2 MiB                     |
+| Data / tree nodes                   | 10,000                    |
+| Data / tree depth                   | 64                        |
+| Parser queue and execution deadline | 5,000 ms                  |
+| Active workers / pending jobs       | 2 / 8 per module instance |
+| Worker V8 old / young heap          | 64 / 16 MiB               |
 
-const Component = getMDXComponent(code, { HonoJSX, HonoDOM, _jsx_runtime });
-```
-
-### Known Issues
-
-#### Cloudflare Workers
-
-Workers can't run binaries (`esbuild`) or `eval`/`new Function`. See the [original repo](https://github.com/kentcdodds/mdx-bundler#cloudflare-workers) for workarounds.
-
-#### Next.JS esbuild ENOENT
-
-esbuild relies on `__dirname` to find its executable. Adding the following before `bundleMDX` fixes this:
+Applications can lower the configurable limits:
 
 ```js
-import path from 'path'
-
-if (process.platform === 'win32') {
-  process.env.ESBUILD_BINARY_PATH = path.join(
-    process.cwd(), 'node_modules', 'esbuild', 'esbuild.exe',
-  )
-} else {
-  process.env.ESBUILD_BINARY_PATH = path.join(
-    process.cwd(), 'node_modules', 'esbuild', 'bin', 'esbuild',
-  )
-}
+await bundleMDX({
+  source,
+  securityLimits: {
+    maxSourceBytes: 128 * 1024,
+    maxNodes: 5000,
+    maxDepth: 32,
+    timeoutMs: 3000,
+  },
+})
 ```
 
-## Credits
+Limits must be positive integers and cannot exceed the built-in ceilings.
+Overloaded queues, worker failures, and deadline expiry reject the operation.
+These are parser resource controls, not an OS sandbox or a total process-memory
+guarantee. Apply request-size limits, rate limiting, and service-wide resource
+controls as well. `securityLimits` does not apply to trusted mode.
 
-Original [mdx-bundler](https://github.com/kentcdodds/mdx-bundler) by [Kent C. Dodds](https://kentcdodds.com) and [contributors](https://github.com/kentcdodds/mdx-bundler#contributors-).
+Keep the server package external when bundling a Node server so its worker files
+remain available. The `client` entry points can be bundled for the browser and
+do not import Node worker or filesystem modules.
 
-## LICENSE
+## Trusted MDX and module bundling
 
-MIT
+Use this mode only for code whose authors and dependencies you trust with the
+application's privileges. Both compilation and client evaluation require an
+explicit opt-in:
 
-<!-- prettier-ignore-start -->
-[version-badge]: https://img.shields.io/npm/v/mdx-bundler-secure.svg?style=flat-square
-[package]: https://www.npmjs.com/package/mdx-bundler-secure
-[downloads-badge]: https://img.shields.io/npm/dm/mdx-bundler-secure.svg?style=flat-square
-[npmtrends]: https://www.npmtrends.com/mdx-bundler-secure
-[license-badge]: https://img.shields.io/npm/l/mdx-bundler-secure.svg?style=flat-square
-[license]: https://github.com/safethecode/mdx-bundler-secure/blob/main/LICENSE
-[node-gyp]: https://github.com/nodejs/node-gyp#installation
-<!-- prettier-ignore-end -->
+```js
+const {code} = await bundleMDX({
+  trusted: true,
+  source: `import Demo from './demo'
+
+<Demo />`,
+  files: {
+    './demo.jsx': 'export default () => <strong>Trusted component</strong>',
+  },
+})
+
+const Content = getMDXComponent(code, undefined, {trusted: true})
+```
+
+The original compiler options, module bundling, named exports, and framework
+configuration are available in trusted mode. Its legacy `blockDangerousJS`
+(default `true`) and `blockJS` filters are best-effort utilities, not execution or
+HTML security boundaries. Trusted code runs with application privileges and is
+not subject to the strict parser limits. Do not mark externally authored MDX as
+trusted to work around a validation error.
+
+## Client API
+
+```js
+// React
+getMDXComponent(code, globals?, options?)
+getMDXExport(code, globals?, options?)
+
+// Other JSX runtimes: mdx-bundler-secure/client/jsx
+getMDXComponent(code, jsxGlobals, globals?, options?)
+getMDXExport(code, jsxGlobals, globals?, options?)
+```
+
+`options.trusted` defaults to `false`. Without it, executable JavaScript strings
+(including old 2.x output) are rejected before evaluation. Static artifacts are
+validated even when a caller has enabled trusted evaluation. `globals` is not
+accepted for static artifacts. For another JSX runtime, supply its
+`_jsx_runtime` in `jsxGlobals`; static artifacts are framework-independent.
+
+`getMDXExport` returns `{default, frontmatter}` for strict content. Source-defined
+named exports require trusted mode. Strict frontmatter artifacts contain plain
+JSON data; dates are serialized and YAML aliases do not preserve object identity.
+The returned server `frontmatter` retains supported Date values.
+
+## Migration from 2.x
+
+1. Rebuild stored `code` strings using 3.x and deploy matching 3.x clients.
+2. Keep untrusted content in the default strict mode. Replace executable
+   expressions with frontmatter values or plain Markdown.
+3. For application-owned MDX that needs full JavaScript, imports, or plugins,
+   explicitly set `trusted: true` at both compiler and client call sites.
+4. Pass security options, paths, plugins, globals, and host components from trusted
+   application code. Do not spread untrusted request objects into these APIs.
+5. Transport artifacts as JSON using your framework's escaping rules, not raw HTML.
+
+Run `npm ci` and `npm run validate` for lint, type checks, strict/trusted tests,
+build, consumer declarations, packaged runtime checks, and the dependency audit.
+See [SECURITY.md](SECURITY.md) and [CHANGELOG.md](CHANGELOG.md).
+
+MIT. Based on [mdx-bundler](https://github.com/kentcdodds/mdx-bundler).

@@ -1,8 +1,8 @@
 /**
  * Security utilities for mdx-bundler.
  *
- * Provides remark plugins and runtime helpers to mitigate arbitrary code
- * execution when processing untrusted MDX content (related to CVE-2026-0969).
+ * Legacy trusted-mode filters and runtime helpers. These do not provide an
+ * execution boundary. Untrusted content uses the separate strict data path.
  */
 
 /**

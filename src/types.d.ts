@@ -23,6 +23,30 @@ export type MDXContentProps = {
   components?: MDXComponents
 }
 
+export type SecurityLimits = {
+  /** Maximum UTF-8 source bytes, 1..262144. Default 262144. */
+  maxSourceBytes?: number
+  /** Maximum parsing and queue duration, 1..5000 milliseconds. Default 5000. */
+  timeoutMs?: number
+  /** Maximum data/AST node budget, 1..10000. Default 10000. */
+  maxNodes?: number
+  /** Maximum data/tree depth, 1..64. Default 64. */
+  maxDepth?: number
+}
+
+export type ClientOptions = {
+  /** Explicit permission to evaluate legacy JavaScript. Never enable for untrusted code. */
+  trusted?: boolean
+}
+
+export type BundleMDXResult<Frontmatter extends {[key: string]: any}> = {
+  /** Strict mode returns a validated data artifact; trusted mode returns executable JavaScript. */
+  code: string
+  frontmatter: Frontmatter
+  errors: import('esbuild').Message[]
+  matter: Omit<GrayMatterFile<string>, 'data'> & {data: Frontmatter}
+}
+
 export type BundleMDX<Frontmatter extends {[key: string]: any}> =
   BundleMDXSource<Frontmatter> | BundleMDXFile<Frontmatter>
 
@@ -44,11 +68,21 @@ export type BundleMDXFile<Frontmatter> = {
 
 type BundleMDXOptions<Frontmatter> = {
   /**
+   * Default false. Strict mode parses Markdown/static JSX into data, permits
+   * literal/frontmatter references, rejects executable syntax and imports, and
+   * uses a bounded parser worker. true enables the legacy compiler with full
+   * application privileges. This option must be controlled by trusted code.
+   */
+  trusted?: boolean
+  /** Lower the strict-mode resource ceilings. Cannot raise the built-in limits. */
+  securityLimits?: SecurityLimits
+  /**
    * The dependencies of the MDX code to be bundled
    *
    * @example
    * ```
    * bundleMDX({
+   *   trusted: true,
    *   source: mdxString,
    *   files: {
    *     './components.tsx': `
@@ -78,6 +112,7 @@ type BundleMDXOptions<Frontmatter> = {
    * @example
    * ```
    * bundleMDX({
+   *   trusted: true,
    *   source: mdxString,
    *   mdxOptions(options) {
    *     // this is the recommended way to add custom remark/rehype plugins:
@@ -99,6 +134,7 @@ type BundleMDXOptions<Frontmatter> = {
    * @example
    * ```
    * bundleMDX({
+   *   trusted: true,
    *   source: mdxString,
    *   esbuildOptions(options) {
    *     options.target = [
@@ -151,6 +187,7 @@ type BundleMDXOptions<Frontmatter> = {
    * @example
    * ```
    * bundleMDX({
+   *   trusted: true,
    *  source: mdxString
    *  cwd: '/users/you/site/mdx_root'
    * })
@@ -163,6 +200,7 @@ type BundleMDXOptions<Frontmatter> = {
    * @example
    * ```
    * bundleMDX({
+   *   trusted: true,
    *   source: mdxString,
    *   grayMatterOptions: (options) => {
    *     options.excerpt = true
@@ -185,6 +223,7 @@ type BundleMDXOptions<Frontmatter> = {
    * @example
    * ```
    * bundleMDX({
+   *   trusted: true,
    *   file: '/path/to/file.mdx',
    *   bundleDirectory: '/path/to/bundle'
    *   bundlePath: '/path/to/public/bundle'
@@ -203,6 +242,7 @@ type BundleMDXOptions<Frontmatter> = {
    * @example
    * ```
    * bundleMDX({
+   *   trusted: true,
    *   jsxConfig: {
    *     jsxLib: {
    *       varName: 'HonoJSX',
@@ -222,9 +262,9 @@ type BundleMDXOptions<Frontmatter> = {
    */
   jsxConfig?: JsxConfig
   /**
-   * Strip JavaScript expressions, dynamic JSX attributes, and source imports
-   * and exports before compilation. Generated frontmatter exports remain.
-   * This does not sanitize HTML or sandbox components and plugins.
+   * Strip expressions, dynamic JSX attributes, and source imports/exports.
+   * In strict mode the static element/attribute/URL policy remains enabled.
+   * In trusted mode this is a legacy filter, not an HTML or execution boundary.
    *
    * @default false
    */
@@ -235,9 +275,9 @@ type BundleMDXOptions<Frontmatter> = {
    * imports from dangerous Node.js built-in modules (e.g. `child_process`,
    * `fs`, `vm`).  Safe expressions like `{title}` are still allowed.
    *
-   * This is NOT a sandbox — determined attackers may find bypasses.  For
-   * untrusted content, use an isolated execution environment or a Markdown
-   * renderer that does not execute JavaScript.
+   * Applies to trusted mode's legacy JavaScript compiler. Strict mode has a
+   * data-only boundary and rejects disabling this option. This legacy filter
+   * does not sandbox executable JavaScript.
    *
    * @default true
    */

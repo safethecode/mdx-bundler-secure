@@ -11,6 +11,7 @@ import {NodeResolvePlugin} from '@esbuild-plugins/node-resolve'
 import {globalExternals} from '@fal-works/esbuild-plugin-global-externals'
 import dirnameMessedUp from './dirname-messed-up.cjs'
 import {remarkBlockJS, remarkBlockDangerousJS} from './security.js'
+import {bundleStaticMDX} from './static.js'
 
 const {readFile, unlink} = fs.promises
 
@@ -44,7 +45,7 @@ const defaultJSXConfig = {
  * @param {import('./types').BundleMDX<Frontmatter>} options
  * @returns
  */
-async function bundleMDX({
+async function bundleTrustedMDX({
   file,
   source,
   files = {},
@@ -333,6 +334,22 @@ async function bundleMDX({
     errors: bundled.errors,
     matter,
   }
+}
+
+/**
+ * @template {{[key: string]: any}} Frontmatter
+ * @param {import('./types').BundleMDX<Frontmatter>} options
+ * @returns {Promise<import('./types').BundleMDXResult<Frontmatter>>}
+ */
+async function bundleMDX(options) {
+  if (Object.hasOwn(options, 'trusted') && options.trusted === true) {
+    if (options.securityLimits !== undefined)
+      throw new Error(
+        '[mdx-bundler-secure] securityLimits only apply to strict mode',
+      )
+    return bundleTrustedMDX(options)
+  }
+  return bundleStaticMDX(options)
 }
 
 export {bundleMDX}

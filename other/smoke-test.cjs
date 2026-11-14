@@ -20,9 +20,26 @@ async function main() {
   assert.equal(typeof esm.bundleMDX, 'function')
   await assert.rejects(
     bundleMDX({source: '{eval("blocked")}'}),
-    /Dangerous JavaScript expression blocked/,
+    /only literal values/,
   )
-  console.log('CommonJS, ESM, client entries, and security smoke tests passed')
+  await assert.rejects(
+    bundleMDX({source: '<script>text</script>', blockJS: true}),
+    /not allowed in strict mode/,
+  )
+  await assert.rejects(
+    bundleMDX({source: "import data from '../private.json'\n\n# Static"}),
+    /strict mode does not resolve/,
+  )
+  assert.throws(() => getMDXExport('return {}'), /trusted: true/)
+  const {code: trustedCode} = await bundleMDX({
+    source: 'export const count = 2\n\n# {count}',
+    trusted: true,
+  })
+  assert.throws(() => getMDXExport(trustedCode), /trusted: true/)
+  assert.equal(getMDXExport(trustedCode, undefined, {trusted: true}).count, 2)
+  console.log(
+    'Strict data, trusted opt-in, CommonJS, ESM, client entries, and security checks passed',
+  )
 }
 
 main().catch(error => {

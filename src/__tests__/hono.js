@@ -5,8 +5,8 @@ import * as HonoDOM from "hono/jsx/dom";
 import * as _jsx_runtime from "hono/jsx/jsx-runtime";
 import {suite} from 'uvu'
 import * as assert from 'uvu/assert'
-import {bundleMDX} from '../index.js'
-import {getMDXComponent} from '../client/jsx.js'
+import {bundleTrustedMDX as bundleMDX} from './trusted-helpers.js'
+import {getTrustedJSXComponent as getMDXComponent} from './trusted-helpers.js'
 
 const test = suite("hono");
 

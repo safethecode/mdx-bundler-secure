@@ -7,8 +7,8 @@ import rtl from '@testing-library/react'
 import leftPad from 'left-pad'
 import remarkMdxImages from 'remark-mdx-images'
 import {VFile} from 'vfile'
-import {bundleMDX} from '../index.js'
-import {getMDXComponent, getMDXExport} from '../client/react.js'
+import {bundleTrustedMDX as bundleMDX} from './trusted-helpers.js'
+import {getTrustedMDXComponent as getMDXComponent, getTrustedMDXExport as getMDXExport} from './trusted-helpers.js'
 
 const test = suite("react");
 const {render} = rtl

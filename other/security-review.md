@@ -1,5 +1,10 @@
 # Security review — 2026-11-11
 
+This is the historical dependency and filter review for 2.0.0. Its clean
+dependency audit did not establish an execution or HTML isolation boundary.
+The [3.x boundary review](security-review-v3.md) documents the replacement of
+those defaults with a data-only content path.
+
 Release: **2.0.0**. Baseline commit:
 `a5d2e6ff35950ddf02ab8164f83f798bdee307f3` (npm 1.0.0).
 

@@ -3,8 +3,8 @@ import {suite} from 'uvu'
 import * as assert from 'uvu/assert'
 import React from 'react'
 import rtl from '@testing-library/react'
-import {bundleMDX} from '../index.js'
-import {getMDXComponent, getMDXExport} from '../client/react.js'
+import {bundleTrustedMDX as bundleMDX} from './trusted-helpers.js'
+import {getTrustedMDXComponent as getMDXComponent, getTrustedMDXExport as getMDXExport} from './trusted-helpers.js'
 import {
   matchesDangerousPattern,
   isDangerousModule,

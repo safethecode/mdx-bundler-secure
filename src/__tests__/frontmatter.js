@@ -6,8 +6,8 @@ import {suite} from 'uvu'
 import * as assert from 'uvu/assert'
 import {VFile} from 'vfile'
 import remarkFrontmatter from 'remark-frontmatter'
-import {bundleMDX} from '../index.js'
-import {getMDXExport} from '../client/react.js'
+import {bundleTrustedMDX as bundleMDX} from './trusted-helpers.js'
+import {getTrustedMDXExport as getMDXExport} from './trusted-helpers.js'
 
 const test = suite('frontmatter security')
 

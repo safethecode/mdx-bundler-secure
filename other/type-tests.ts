@@ -6,6 +6,7 @@ async function checkConsumerTypes() {
   const result = await bundleMDX<{title: string}>({
     source: '---\ntitle: Typed frontmatter\n---\n# Test',
     blockJS: true,
+    securityLimits: {timeoutMs: 4000, maxSourceBytes: 100000},
   })
   const title: string = result.frontmatter.title
   // @ts-expect-error The caller's frontmatter shape must be preserved.
@@ -18,6 +19,12 @@ async function checkConsumerTypes() {
     {},
   )
   const jsxCount: number = jsxExported.count
+  getMDXExport(result.code, undefined, {trusted: true})
+  getMDXComponent(result.code, undefined, {trusted: true})
+  getJSXExport(result.code, {}, undefined, {trusted: true})
+  await bundleMDX({source: 'export const count = 2', trusted: true})
+  // @ts-expect-error Opt-in is an explicit boolean controlled by the caller.
+  await bundleMDX({source: '# Safe', trusted: 'true'})
   return {
     title,
     count,
